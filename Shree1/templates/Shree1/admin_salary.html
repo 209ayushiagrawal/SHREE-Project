@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salary Management - SHREE</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'Shree1/css/admin_salary.css' %}" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="logo-section">
+        <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+        <div>
+          <h2 class="logo-name">SHREE</h2>
+          <p style="font-size: 10px; color: #94a3b8">
+          Smart Hostel Record & Employee Evaluation
+        </p>
+        </div>
+      </div>
+      <nav class="nav-menu">
+        <a href="{% url 'admin_dashboard' %}" class="nav-item">
+          <i class="fa-solid fa-table-cells-large"></i> Dashboard
+        </a>
+
+        <a href="{% url 'admin_user_management' %}" class="nav-item">
+          <i class="fa-solid fa-user-group"></i> User Management
+        </a>
+
+        <a href="{% url 'admin_attendance' %}" class="nav-item">
+          <i class="fa-regular fa-calendar-check"></i> Attendance
+        </a>
+
+        <a href="{% url 'admin_inventory' %}" class="nav-item">
+          <i class="fa-solid fa-box-open"></i> Inventory
+        </a>
+
+        <a href="{% url 'admin_employee_evaluation' %}" class="nav-item">
+          <i class="fa-regular fa-star"></i> Employee Evaluation
+        </a>
+
+        <a href="{% url 'admin_leave_Management' %}" class="nav-item">
+          <i class="fa-solid fa-file-contract"></i> Leave Management
+        </a>
+
+        <a href="{% url 'admin_salary' %}" class="nav-item active">
+          <i class="fa-solid fa-indian-rupee-sign"></i> Salary
+        </a>
+
+        <a href="{% url 'admin_reports' %}" class="nav-item">
+          <i class="fa-solid fa-chart-column"></i> Reports
+        </a>
+
+        <a href="{% url 'admin_profile' %}" class="nav-item">
+          <i class="fa-regular fa-user"></i> Profile
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <h1>Salary Management</h1>
+          <p>Manage employee salaries and payroll</p>
+        </div>
+        <button class="btn-download">
+          <i class="fa-solid fa-download"></i> Download Payroll
+        </button>
+      </header>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Payroll</div>
+          <div class="stat-value">₹{{ stats.total_payroll }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Employees</div>
+          <div class="stat-value">{{ stats.total_employees }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Salary</div>
+          <div class="stat-value">₹{{ stats.avg_salary }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Deductions</div>
+          <div class="stat-value deduction">₹{{ stats.total_deductions }}</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <h2>Salary Details</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Employee Name</th>
+              <th>Role</th>
+              <th>Basic</th>
+              <th>Allowance</th>
+              <th>Deduction</th>
+              <th>Net Salary</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in salaries %}
+            <tr>
+              <td class="emp-name">{{ item.name }}</td>
+              <td class="emp-role">{{ item.role }}</td>
+              <td>₹{{ item.basic }}</td>
+              <td class="text-green">{{ item.allowance }}</td>
+              <td class="text-red">{{ item.deduction }}</td>
+              <td class="net-salary">₹{{ item.net }}</td>
+              <td><button class="btn-process">Process</button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="{% static 'Shree1/js/admin_salary.js' %}"></script>
+  </body>
+</html>

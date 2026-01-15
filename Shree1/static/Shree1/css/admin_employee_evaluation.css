@@ -1,0 +1,191 @@
+:root {
+  --primary-blue: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg-light: #f8fafc;
+  --border-color: #e2e8f0;
+  --star-gold: #fbbf24;
+  --star-gray: #d1d5db;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+}
+
+body {
+  background: var(--bg-light);
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  display: flex;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid var(--border-color);
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+}
+
+.nav-logo-file {
+    width: 50px !important;  /* !important forces the browser to obey */
+    height: 50px !important;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.logo-name {
+  color: #334155;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  text-decoration: none;
+  color: #64748b;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+  color: var(--primary-blue);
+}
+
+.nav-item.active {
+  background: #eff6ff;
+  color: var(--primary-blue);
+  font-weight: 500;
+}
+
+/* Content Area */
+.main-content {
+  margin-left: 300px;
+  flex: 1;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.top-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
+}
+
+.top-header p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.btn-save {
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-save:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Evaluation Card */
+.evaluation-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  padding: 30px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.emp-info h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 4px 0;
+}
+
+.emp-info p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Star Rating */
+.stars {
+  display: flex;
+  gap: 4px;
+}
+
+.stars i {
+  font-size: 22px;
+  color: var(--star-gray);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.stars i.checked {
+  color: var(--star-gold);
+}
+
+/* Text Area */
+textarea {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text-main);
+  resize: none;
+  background-color: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+textarea::placeholder {
+  color: #94a3b8;
+}

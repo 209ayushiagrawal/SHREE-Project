@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHREE - Leave Management</title>
+    <link rel="stylesheet" href="{% static 'Shree1/css/dashboardWarden.css' %}">
+    <link rel="stylesheet" href="{% static 'Shree1/css/warden_leave.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">S</div>
+                <div>
+                    <h2 class="logo-name">SHREE</h2>
+                    <p class="logo-tagline">Smart Hostel Record</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="{% url 'warden_dashboard' %}" class="nav-item">
+                    <i class="fa-solid fa-table-columns nav-icon"></i><span>Dashboard</span>
+                </a>
+                <a href="{% url 'attendance' %}" class="nav-item">
+                    <i class="fa-solid fa-calendar-check nav-icon"></i><span>Attendance</span>
+                </a>
+                <a href="{% url 'inventory' %}" class="nav-item">
+                    <i class="fa-solid fa-boxes-stacked nav-icon"></i><span>Inventory</span>
+                </a>
+                <a href="{% url 'warden_leave' %}" class="nav-item active">
+                    <i class="fa-solid fa-envelope nav-icon"></i><span>Leave Management</span>
+                </a>
+                <a href="{% url 'warden_profile' %}" class="nav-item">
+                    <i class="fa-regular fa-user nav-icon"></i><span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="user-info">
+                    <span class="user-name">{{ warden.name|default:"Warden" }}</span>
+                    <span class="user-role">Warden</span>
+                </div>
+                <button class="logout-btn" onclick="location.href='{% url 'welcome_role' %}'">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </header>
+
+            <section class="intro-card" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>Leave Management</h1>
+                    <p>Manage worker leave requests for approval</p>
+                </div>
+                <button class="btn-request" onclick="toggleModal(true)">
+                    <i class="fa-solid fa-plus"></i> Create Request
+                </button>
+            </section>
+
+            <div class="content-card">
+                <h3>Pending Leave Requests</h3>
+                <table class="leave-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Leave Type</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in pending %}
+                        <tr>
+                            <td>{{ req.worker.name }}</td>
+                            <td>{{ req.leave_type }}</td>
+                            <td>{{ req.start_date|date:"M d, Y" }}</td>
+                            <td>{{ req.end_date|date:"M d, Y" }}</td>
+                            <td><span class="status-badge pending">{{ req.status }}</span></td>
+                            <td><button class="btn-view" disabled>Requested</button></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" style="text-align:center; padding: 20px;">No pending requests found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="content-card">
+                <h3>Recent History</h3>
+                <table class="leave-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Leave Type</th>
+                            <th>Date (Start)</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for h in history %}
+                        <tr>
+                            <td>{{ h.worker.name }}</td>
+                            <td>{{ h.leave_type }}</td>
+                            <td>{{ h.start_date|date:"M d, Y" }}</td>
+                            <td><span class="status-badge {{ h.status|lower }}">{{ h.status }}</span></td>
+                            <td><button class="btn-view">View</button></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" style="text-align:center; padding: 20px;">No leave history available.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="leaveModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Leave Request</h2>
+                <button class="close-btn" onclick="toggleModal(false)">&times;</button>
+            </div>
+            <form method="POST" action="{% url 'warden_leave' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>Select Employee (Name - ID)</label>
+                    <select name="worker_id" required>
+                        <option value="" disabled selected>Choose a worker...</option>
+                        {% for worker in workers %}
+                            <option value="{{ worker.user_id }}">
+                                {{ worker.name }} (ID: #{{ worker.worker_id }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Leave Type</label>
+                    <select name="leave_type" required>
+                        <option value="" disabled selected>Select Leave Type</option>
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Casual Leave">Casual Leave</option>
+                        <option value="Medical">Medical</option>
+                        <option value="Emergency">Emergency</option>
+                    </select>
+                </div>
+
+                <div class="form-row" style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>From Date</label>
+                        <input type="date" name="start_date" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>To Date</label>
+                        <input type="date" name="end_date" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Reason for Leave</label>
+                    <textarea name="reason" rows="3" placeholder="Explain the reason..." style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;"></textarea>
+                </div>
+
+                <button type="submit" class="btn-request" style="width: 100%; margin-top: 10px;">
+                    Submit to Admin
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="{% static 'Shree1/js/warden_leave.js' %}"></script>
+</body>
+</html>

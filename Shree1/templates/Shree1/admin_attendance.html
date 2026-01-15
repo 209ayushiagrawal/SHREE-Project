@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHREE - Attendance Management</title>
+
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/dashboardAdmin.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/admin_attendance.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo-section">
+        <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+        <div>
+            <h2 class="logo-name">SHREE</h2>
+           <p style="font-size: 10px; color: #94a3b8">
+          Smart Hostel Record & Employee Evaluation
+        </p>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a href="{% url 'admin_dashboard' %}" class="nav-item">
+            <i class="fa-solid fa-table-cells-large"></i> Dashboard
+          </a>
+          <a href="{% url 'admin_user_management' %}" class="nav-item">
+            <i class="fa-solid fa-users"></i> User Management
+          </a>
+          <a href="#" class="nav-item active">
+            <i class="fa-regular fa-calendar-check"></i> Attendance
+          </a>
+          <a href="{% url 'admin_inventory' %}" class="nav-item">
+            <i class="fa-solid fa-box-open"></i> Inventory
+          </a>
+          <a href="{% url 'admin_employee_evaluation' %}" class="nav-item">
+            <i class="fa-regular fa-star"></i> Employee Evaluation
+          </a>
+          <a href="{% url 'admin_leave_Management' %}" class="nav-item">
+            <i class="fa-solid fa-file-contract"></i> Leave Management
+          </a>
+          <a href="{% url 'admin_salary' %}" class="nav-item">
+            <i class="fa-solid fa-indian-rupee-sign"></i> Salary
+          </a>
+          <a href="{% url 'admin_reports' %}" class="nav-item">
+            <i class="fa-solid fa-chart-column"></i> Reports
+          </a>
+          <a href="{% url 'admin_profile' %}" class="nav-item">
+            <i class="fa-regular fa-user"></i> Profile
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-header">
+          <div class="user-info">
+            <span class="user-name">aa</span>
+            <span class="user-role">Admin</span>
+          </div>
+          <a href="{% url 'logout' %}" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </a>
+        </header>
+
+        <div class="page-header-row">
+          <section class="dashboard-intro">
+            <h1>Attendance Management</h1>
+            <p>Mark and manage employee attendance</p>
+          </section>
+          <button class="save-btn" id="saveBtn">
+            <i class="fa-regular fa-floppy-disk"></i> Save Attendance
+          </button>
+        </div>
+
+        <div class="content-card">
+          <div class="date-section">
+            <div class="date-wrapper">
+              <i class="fa-regular fa-calendar"></i>
+              <input type="date" value="2026-01-14" class="date-input" />
+            </div>
+            <span class="date-label">Select Date</span>
+          </div>
+
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Employee Name</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Attendance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rajesh Kumar</td>
+                <td>Kitchen Staff</td>
+                <td>Kitchen</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="status-btn present active"
+                      onclick="toggleStatus(this, 'present')"
+                    >
+                      Present
+                    </button>
+                    <button
+                      class="status-btn absent"
+                      onclick="toggleStatus(this, 'absent')"
+                    >
+                      Absent
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Priya Sharma</td>
+                <td>Cleaning Staff</td>
+                <td>Cleaning</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="status-btn present active"
+                      onclick="toggleStatus(this, 'present')"
+                    >
+                      Present
+                    </button>
+                    <button
+                      class="status-btn absent"
+                      onclick="toggleStatus(this, 'absent')"
+                    >
+                      Absent
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Amit Patel</td>
+                <td>Security Guard</td>
+                <td>Security</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="status-btn present"
+                      onclick="toggleStatus(this, 'present')"
+                    >
+                      Present
+                    </button>
+                    <button
+                      class="status-btn absent active"
+                      onclick="toggleStatus(this, 'absent')"
+                    >
+                      Absent
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Sunita Devi</td>
+                <td>Cleaning Staff</td>
+                <td>Cleaning</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="status-btn present active"
+                      onclick="toggleStatus(this, 'present')"
+                    >
+                      Present
+                    </button>
+                    <button
+                      class="status-btn absent"
+                      onclick="toggleStatus(this, 'absent')"
+                    >
+                      Absent
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="summary-footer">
+            <h3>Attendance Summary</h3>
+            <div class="summary-cards">
+              <div class="sum-card card-green">
+                <span>Present</span>
+                <h2 id="countPresent">3</h2>
+              </div>
+              <div class="sum-card card-red">
+                <span>Absent</span>
+                <h2 id="countAbsent">1</h2>
+              </div>
+              <div class="sum-card card-blue">
+                <span>Attendance Rate</span>
+                <h2 id="attendanceRate">75%</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="{% static 'Shree1/js/admin_attendance.js' %}"></script>
+  </body>
+</html>

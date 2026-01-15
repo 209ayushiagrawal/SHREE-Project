@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warden Login - SHREE</title>
+    <link rel="stylesheet" href="{% static 'Shree1/css/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Red Error Banner Styling */
+        .error-message-banner {
+            background-color: #fee2e2; /* Light red background */
+            color: #991b1b;           /* Dark red text */
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <a href="{% url 'welcome_role' %}" class="back-arrow">←</a>
+        <h1 class="login-title" style="color: #10b981;">Warden Login</h1>
+        <p class="subtitle">Enter your credentials to access the warden portal</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="error-message-banner">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'warden_login' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>Warden ID</label>
+                <input type="text" name="warden_id" placeholder="Enter your warden ID" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="login-submit-btn" style="background-color: #10b981;">Login</button>
+        </form>
+    </div>
+    <script src="{% static 'Shree1/js/login.js' %}"></script>
+</body>
+</html>

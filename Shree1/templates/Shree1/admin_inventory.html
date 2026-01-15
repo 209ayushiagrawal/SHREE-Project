@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHREE - Inventory Management</title>
+
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/dashboardAdmin.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/admin_inventory.css' %}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo-section">
+          <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+          <div>
+            <h2 class="logo-name">SHREE</h2>
+           <p style="font-size: 10px; color: #94a3b8">
+          Smart Hostel Record & Employee Evaluation
+        </p>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a href="{% url 'admin_dashboard' %}" class="nav-item">
+            <i class="fa-solid fa-table-cells-large"></i> Dashboard
+          </a>
+          <a href="{% url 'admin_user_management' %}" class="nav-item">
+            <i class="fa-solid fa-users"></i> User Management
+          </a>
+          <a href="{% url 'admin_attendance' %}" class="nav-item">
+            <i class="fa-regular fa-calendar-check"></i> Attendance
+          </a>
+          <a href="#" class="nav-item active">
+            <i class="fa-solid fa-box-open"></i> Inventory
+          </a>
+          <a href="{% url 'admin_employee_evaluation' %}" class="nav-item">
+            <i class="fa-regular fa-star"></i> Employee Evaluation
+          </a>
+          <a href="{% url 'admin_leave_Management' %}" class="nav-item">
+            <i class="fa-solid fa-file-contract"></i> Leave Management
+          </a>
+          <a href="{% url 'admin_salary' %}" class="nav-item">
+            <i class="fa-solid fa-indian-rupee-sign"></i> Salary
+          </a>
+          <a href="{% url 'admin_reports' %}" class="nav-item">
+            <i class="fa-solid fa-chart-column"></i> Reports
+          </a>
+          <a href="{% url 'admin_profile' %}" class="nav-item">
+            <i class="fa-regular fa-user"></i> Profile
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-header">
+          <div class="user-info">
+            <span class="user-name">Admin</span>
+            <span class="user-role">Administrator</span>
+          </div>
+          <a href="{% url 'logout' %}" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </a>
+        </header>
+
+        <div class="page-header-row">
+          <section class="dashboard-intro">
+            <h1>Inventory Management</h1>
+            <p>Track and manage hostel inventory</p>
+          </section>
+          <button class="add-btn">
+            <i class="fa-solid fa-plus"></i> Add New Item
+          </button>
+        </div>
+
+        <div class="inventory-stats">
+          <div class="stat-card">
+            <span>Total Items</span>
+            <h2>8</h2>
+          </div>
+          <div class="stat-card">
+            <span>Critical Stock</span>
+            <h2 class="text-red">1</h2>
+          </div>
+          <div class="stat-card">
+            <span>Low Stock</span>
+            <h2 class="text-orange">5</h2>
+          </div>
+          <div class="stat-card">
+            <span>Good Stock</span>
+            <h2 class="text-green">2</h2>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Current Stock</th>
+                <th>Required Stock</th>
+                <th>Last Delivered Qty</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody">
+              <tr>
+                <td><span class="id-badge">#101</span></td>
+                <td><i class="fa-solid fa-box-archive item-icon"></i> Rice</td>
+                <td class="text-orange font-bold">50 kg</td>
+                <td>100 kg</td>
+                <td>120 kg <span class="date-sub">on 12 Jan</span></td>
+              </tr>
+              <tr>
+                <td><span class="id-badge">#102</span></td>
+                <td>
+                  <i class="fa-solid fa-bottle-droplet item-icon"></i> Cooking
+                  Oil
+                </td>
+                <td class="text-red font-bold">15 L</td>
+                <td>30 L</td>
+                <td>40 L <span class="date-sub">on 10 Jan</span></td>
+              </tr>
+              <tr>
+                <td><span class="id-badge">#103</span></td>
+                <td>
+                  <i class="fa-solid fa-pump-soap item-icon"></i> Cleaning
+                  Supplies
+                </td>
+                <td class="text-red font-bold">5 pcs</td>
+                <td>20 pcs</td>
+                <td>15 pcs <span class="date-sub">on 05 Jan</span></td>
+              </tr>
+              <tr>
+                <td><span class="id-badge">#106</span></td>
+                <td>
+                  <i class="fa-solid fa-wheat-awn item-icon"></i> Wheat Flour
+                </td>
+                <td class="text-green font-bold">80 kg</td>
+                <td>100 kg</td>
+                <td>100 kg <span class="date-sub">on 11 Jan</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <script src="{% static 'Shree1/js/admin_inventory.js' %}"></script>
+  </body>
+</html>

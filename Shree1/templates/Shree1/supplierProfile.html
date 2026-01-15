@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Supplier Profile Settings</title>
+    <link rel="stylesheet" href="supplierProfile.css" />
+  </head>
+  <body>
+    <div class="page">
+      <h1>Profile Settings</h1>
+      <p class="subtitle">Manage your account information</p>
+
+      <!-- PROFILE CARD -->
+      <div class="card">
+        <div class="profile-header">
+          <div class="avatar">👤</div>
+          <div>
+            <h2>egza</h2>
+            <span class="role">Supplier</span><br />
+            <button class="btn-outline">Change Photo</button>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" value="egza" />
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" value="egza@gmail.com" />
+          </div>
+          <div class="field">
+            <label>Phone Number</label>
+            <input type="text" value="+91 98765 43210" />
+          </div>
+          <div class="field">
+            <label>Employee ID</label>
+            <input type="text" value="EMP001" disabled />
+          </div>
+          <div class="field">
+            <label>Department</label>
+            <input type="text" value="Kitchen" />
+          </div>
+          <div class="field">
+            <label>Joining Date</label>
+            <input type="text" value="15-01-2024" disabled />
+          </div>
+          <div class="field full">
+            <label>Address</label>
+            <input type="text" value="123 Main Street, City, State" />
+          </div>
+        </div>
+
+        <button class="btn-primary">💾 Save Changes</button>
+      </div>
+
+      <!-- PASSWORD CARD -->
+      <div class="card">
+        <h2>Change Password</h2>
+
+        <div class="form-grid">
+          <div class="field full">
+            <label>Current Password</label>
+            <input type="password" />
+          </div>
+          <div class="field full">
+            <label>New Password</label>
+            <input type="password" />
+          </div>
+          <div class="field full">
+            <label>Confirm New Password</label>
+            <input type="password" />
+          </div>
+        </div>
+
+        <button class="btn-primary">Update Password</button>
+      </div>
+    </div>
+
+    <script src="supplierProfile.js"></script>
+  </body>
+</html>

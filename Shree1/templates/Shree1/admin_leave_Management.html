@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Leave Management - SHREE</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+   <link rel="stylesheet" href="{% static 'Shree1/css/admin_leave_Management.css' %}" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="logo-section">
+        <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+        <h2 class="logo-name">SHREE</h2>
+        <p style="font-size: 10px; color: #94a3b8">
+          Smart Hostel Record & Employee Evaluation
+        </p>
+      </div>
+      <nav class="nav-menu">
+        <a href="{% url 'admin_dashboard' %}" class="nav-item">
+          <i class="fa-solid fa-table-cells-large"></i> Dashboard
+        </a>
+
+        <a href="{% url 'admin_user_management' %}" class="nav-item">
+          <i class="fa-solid fa-user-group"></i> User Management
+        </a>
+
+        <a href="{% url 'admin_attendance' %}" class="nav-item">
+          <i class="fa-regular fa-calendar-check"></i> Attendance
+        </a>
+
+        <a href="{% url 'admin_inventory' %}" class="nav-item">
+          <i class="fa-solid fa-box-open"></i> Inventory
+        </a>
+
+        <a href="{% url 'admin_employee_evaluation' %}" class="nav-item">
+          <i class="fa-regular fa-star"></i> Employee Evaluation
+        </a>
+
+        <a href="{% url 'admin_leave_Management' %}" class="nav-item active">
+          <i class="fa-solid fa-file-contract"></i> Leave Management
+        </a>
+
+        <a href="{% url 'admin_salary' %}" class="nav-item">
+          <i class="fa-solid fa-indian-rupee-sign"></i> Salary
+        </a>
+
+        <a href="{% url 'admin_reports' %}" class="nav-item">
+          <i class="fa-solid fa-chart-column"></i> Reports
+        </a>
+
+        <a href="{% url 'admin_profile' %}" class="nav-item">
+          <i class="fa-regular fa-user"></i> Profile
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <h1>Leave Management</h1>
+          <p>Manage employee leave requests</p>
+        </div>
+        <div class="header-right">
+           <a href="{% url 'logout' %}" style="color: red; text-decoration: none; font-weight: 500;">
+             <i class="fa-solid fa-right-from-bracket"></i> Logout
+           </a>
+        </div>
+      </header>
+
+      <div class="leave-card">
+        <h3>Pending Leave Requests</h3>
+
+        <table class="leave-table">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Leave Type</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rajesh Kumar</td>
+              <td>Sick Leave</td>
+              <td>1/15/2026</td>
+              <td>1/16/2026</td>
+              <td>Fever and cold</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn btn-approve">Approve</button>
+                <button class="btn btn-reject">Reject</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Priya Sharma</td>
+              <td>Casual Leave</td>
+              <td>1/18/2026</td>
+              <td>1/18/2026</td>
+              <td>Personal work</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn btn-approve">Approve</button>
+                <button class="btn btn-reject">Reject</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Amit Patel</td>
+              <td>Emergency Leave</td>
+              <td>1/20/2026</td>
+              <td>1/22/2026</td>
+              <td>Family emergency</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn btn-approve">Approve</button>
+                <button class="btn btn-reject">Reject</button>
+              </td>
+            </tr>
+             </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="{% static 'js/admin_leave_management.js' %}"></script>
+  </body>
+</html>

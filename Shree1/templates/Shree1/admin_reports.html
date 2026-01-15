@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - SHREE</title>
+    <link rel="stylesheet" href="{% static 'Shree1/css/admin_reports.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-section">
+            <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+            <div class="logo-details">
+                <h2>SHREE</h2>
+                <p>Smart Hostel Record</p>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="{% url 'admin_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                <i class="fa-solid fa-table-cells-large nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="{% url 'admin_user_management' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_user_management' %}active{% endif %}">
+                <i class="fa-solid fa-users nav-icon"></i>
+                <span>User Management</span>
+            </a>
+            
+            <a href="{% url 'admin_attendance' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_attendance' %}active{% endif %}">
+                <i class="fa-regular fa-calendar-check nav-icon"></i>
+                <span>Attendance</span>
+            </a>
+            
+            <a href="{% url 'admin_inventory' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_inventory' %}active{% endif %}">
+                <i class="fa-solid fa-box-archive nav-icon"></i>
+                <span>Inventory</span>
+            </a>
+            
+            <a href="{% url 'admin_employee_evaluation' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_employee_evaluation' %}active{% endif %}">
+                <i class="fa-regular fa-star nav-icon"></i>
+                <span>Employee Evaluation</span>
+            </a>
+            
+            <a href="{% url 'admin_leave_Management' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_leave_Management' %}active{% endif %}">
+                <i class="fa-regular fa-file-lines nav-icon"></i>
+                <span>Leave Management</span>
+            </a>
+            
+            <a href="{% url 'admin_salary' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_salary' %}active{% endif %}">
+                <i class="fa-solid fa-indian-rupee-sign nav-icon"></i>
+                <span>Salary</span>
+            </a>
+            
+            <a href="{% url 'admin_reports' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_reports' %}active{% endif %}">
+                <i class="fa-solid fa-chart-line nav-icon"></i>
+                <span>Reports</span>
+            </a>
+            
+            <a href="{% url 'admin_profile' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
+                <i class="fa-regular fa-user nav-icon"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="admin-meta">
+                <span class="admin-name">slzmdl</span>
+                <span class="admin-role">Admin</span>
+            </div>
+            <button class="logout-btn" onclick="location.href='{% url 'welcome_role' %}'">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </header>
+
+        <section class="page-title">
+            <h1>Reports & Analytics</h1>
+            <p>Generate and download system reports</p>
+        </section>
+
+        <div class="card">
+            <div class="card-header">Generate New Report</div>
+            <div class="generate-row">
+                <select class="form-control">
+                    <option>Attendance Report</option>
+                    <option>Inventory Report</option>
+                    <option>Salary Report</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Select Date Range (e.g. Dec 2025)">
+                <button class="btn-blue" id="generateBtn">
+                    <i class="fa-solid fa-file-invoice"></i> Generate Report
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Available Reports</div>
+
+            <div class="reports-list">
+                <div class="report-item">
+                    <div class="report-main">
+                        <div class="report-icon-box">
+                            <i class="fa-regular fa-file-lines"></i>
+                        </div>
+                        <div class="report-details">
+                            <h3>Attendance Report</h3>
+                            <p>December 2025 • 1250 records</p>
+                            <span>Generated on 2026-01-01</span>
+                        </div>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-download">
+                            <i class="fa-solid fa-download"></i> PDF
+                        </button>
+                        <button class="btn-download btn-excel">
+                            <i class="fa-solid fa-file-excel"></i> Excel
+                        </button>
+                    </div>
+                </div>
+
+                <div class="report-item">
+                    <div class="report-main">
+                        <div class="report-icon-box">
+                            <i class="fa-regular fa-file-lines"></i>
+                        </div>
+                        <div class="report-details">
+                            <h3>Inventory Report</h3>
+                            <p>December 2025 • 85 records</p>
+                            <span>Generated on 2026-01-01</span>
+                        </div>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-download">
+                            <i class="fa-solid fa-download"></i> PDF
+                        </button>
+                        <button class="btn-download btn-excel">
+                            <i class="fa-solid fa-file-excel"></i> Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'Shree1/js/admin_reports.js' %}"></script>
+</body>
+</html>

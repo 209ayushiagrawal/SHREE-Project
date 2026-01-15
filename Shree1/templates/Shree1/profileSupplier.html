@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Supplier Profile</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/profileSupplier.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="logo-section">
+          <div class="logo-icon">S</div>
+          <div>
+            <h2 class="logo-name">SHREE</h2>
+            <p class="logo-tagline">
+              Smart Hostel Record & Employee Evaluation
+            </p>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a href="{% url 'supplier_dashboard' %}" class="nav-item">
+            <i class="fa-solid fa-table-cells-large"></i> Dashboard
+          </a>
+          <a href="{% url 'supplier_profile' %}" class="nav-item active">
+            <i class="fa-solid fa-user"></i> Profile
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- HEADER -->
+        <header class="top-header">
+          <div class="user-info">
+            <span class="user-name">{{ request.user.username }}</span>
+            <span class="user-role">Supplier</span>
+          </div>
+
+          <a href="{% url 'logout' %}" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </a>
+        </header>
+
+        <section class="profile-header">
+          <h1>Profile Settings</h1>
+          <p>Manage your account information</p>
+        </section>
+
+        <!-- PROFILE CARD -->
+        <div class="profile-card">
+          <div class="profile-top">
+            <div class="avatar">👤</div>
+            <div>
+              <h2>{{ request.user.username }}</h2>
+              <p class="role">Supplier</p>
+              <button class="photo-btn">Change Photo</button>
+            </div>
+          </div>
+
+          <!-- PROFILE FORM -->
+          <form id="profileForm">
+            <div class="form-grid">
+              <div>
+                <label>Full Name</label>
+                <input type="text" value="xsdf" />
+              </div>
+
+              <div>
+                <label>Email Address</label>
+                <input type="email" value="xsdf@gmail.com" disabled />
+              </div>
+
+              <div>
+                <label>Phone Number</label>
+                <input type="text" value="+91 98765 43210" />
+              </div>
+
+              <div>
+                <label>Employee ID</label>
+                <input type="text" value="EMP001" disabled />
+              </div>
+
+              <div>
+                <label>Department</label>
+                <input type="text" value="Kitchen" />
+              </div>
+
+              <div>
+                <label>Joining Date</label>
+                <input type="text" value="15-01-2024" disabled />
+              </div>
+            </div>
+
+            <div>
+              <label>Address</label>
+              <input type="text" value="123 Main Street, City, State" />
+            </div>
+
+            <button class="save-btn" type="submit">Save Changes</button>
+          </form>
+        </div>
+
+        <!-- CHANGE PASSWORD -->
+        <div class="password-card">
+          <h3>Change Password</h3>
+
+          <form id="passwordForm">
+            <label>Current Password</label>
+            <input type="password" />
+
+            <label>New Password</label>
+            <input type="password" />
+
+            <label>Confirm New Password</label>
+            <input type="password" />
+
+            <button class="save-btn">Update Password</button>
+          </form>
+        </div>
+      </main>
+    </div>
+
+    <script src="{% static 'Shree1/js/profileSupplier.js' %}"></script>
+  </body>
+</html>

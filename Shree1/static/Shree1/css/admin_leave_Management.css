@@ -1,0 +1,185 @@
+:root {
+  --primary-blue: #2563eb;
+  --bg-light: #f8fafc;
+  --border-color: #e2e8f0;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --success-green: #10b981;
+  --danger-red: #ef4444;
+  --warning-yellow: #f59e0b;
+  --warning-bg: #fef3c7;
+}
+
+body {
+  background: var(--bg-light);
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  display: flex;
+}
+
+/* --- Sidebar Styles (Consistent with Evaluation Page) --- */
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid var(--border-color);
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+}
+
+.logo-section {
+  margin-bottom: 30px;
+}
+
+.logo-name {
+  color: #334155;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  text-decoration: none;
+  color: #64748b;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+  color: var(--primary-blue);
+}
+
+.nav-item.active {
+  background: #eff6ff;
+  color: var(--primary-blue);
+  font-weight: 500;
+}
+
+/* --- Main Content --- */
+.main-content {
+  margin-left: 300px;
+  flex: 1;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.top-header {
+  margin-bottom: 30px;
+}
+
+.top-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
+}
+
+.top-header p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* --- Leave Card & Table --- */
+.leave-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  padding: 30px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.leave-card h3 {
+  font-size: 18px;
+  color: var(--text-main);
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.leave-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.leave-table th {
+  text-align: left;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.leave-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--text-muted);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.leave-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Badges */
+.status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status.pending {
+  background: var(--warning-bg);
+  color: var(--warning-yellow);
+}
+
+/* Action Buttons */
+.btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-approve {
+  background-color: var(--success-green);
+  color: white;
+  margin-right: 8px;
+}
+
+.btn-reject {
+  background-color: var(--danger-red);
+  color: white;
+}
+.nav-logo-file {
+    width: 50px !important;  /* !important forces the browser to obey */
+    height: 50px !important;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}

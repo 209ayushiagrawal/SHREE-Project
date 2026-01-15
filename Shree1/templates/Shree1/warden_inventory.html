@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHREE - Inventory Management</title>
+    <link rel="stylesheet" href="{% static 'Shree1/css/dashboardWarden.css' %}">
+    <link rel="stylesheet" href="{% static 'Shree1/css/warden_inventory.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">S</div>
+                <div>
+                    <h2 class="logo-name">SHREE</h2>
+                    <p class="logo-tagline">Smart Hostel Record</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="{% url 'warden_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-table-columns nav-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'attendance' %}" class="nav-item {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
+                    <i class="fa-solid fa-calendar-check nav-icon"></i>
+                    <span>Attendance</span>
+                </a>
+                <a href="{% url 'inventory' %}" class="nav-item {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}">
+                    <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                    <span>Inventory</span>
+                </a>
+                <a href="{% url 'warden_leave' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_leave' %}active{% endif %}">
+                    <i class="fa-solid fa-envelope nav-icon"></i>
+                    <span>Leave Management</span>
+                </a>
+                <a href="{% url 'warden_profile' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_profile' %}active{% endif %}">
+                    <i class="fa-regular fa-user nav-icon"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="user-info">
+                    <span class="user-name">{{ warden.name|default:"Warden" }}</span>
+                    <span class="user-role">Warden Portal</span>
+                </div>
+                <a href="{% url 'welcome_role' %}" class="logout-btn" style="text-decoration:none;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </header>
+
+            <section class="inventory-header">
+                <div>
+                    <h1>Inventory Management</h1>
+                    <p>Track and manage hostel inventory</p>
+                </div>
+            </section>
+
+            <div class="inventory-stats">
+                <div class="stat-box">
+                    <span>Total Items</span>
+                    <h2>{{ total_items|default:"0" }}</h2>
+                </div>
+                <div class="stat-box critical">
+                    <span>Critical Stock</span>
+                    <h2 class="red-text">{{ critical_count|default:"0" }}</h2>
+                </div>
+                <div class="stat-box low">
+                    <span>Low Stock</span>
+                    <h2 class="orange-text">{{ low_count|default:"0" }}</h2>
+                </div>
+                <div class="stat-box good">
+                    <span>Good Stock</span>
+                    <h2 class="green-text">{{ good_count|default:"0" }}</h2>
+                </div>
+            </div>
+
+            <form method="GET" action="{% url 'inventory' %}" class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" name="search" class="search-input" placeholder="Search by ID or Name..." value="{{ search_query }}">
+                <button type="submit" style="display:none"></button> 
+            </form>
+
+            <form method="POST" action="{% url 'update_inventory_stock' %}">
+                {% csrf_token %}
+                <div class="inventory-card">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Current Stock</th>
+                                <th>Required Stock</th>
+                                <th>Status</th>
+                                <th>Update Stock (+/-)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td><span class="id-text">#{{ item.item_id }}</span></td>
+                                <td>
+                                    <i class="fa-solid fa-box-archive"></i> {{ item.item_name }}
+                                    {% if item.is_delivered %}
+                                        <span class="delivery-alert-tag" title="Supplier marked as delivered">
+                                            <i class="fa-solid fa-truck-fast"></i> At Gate
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="stock-val {% if item.get_status == 'Critical' %}red-text{% elif item.get_status == 'Low' %}orange-text{% endif %}">
+                                    {{ item.current_stock }} {{ item.unit }}
+                                </td>
+                                <td>{{ item.required_stock }} {{ item.unit }}</td>
+                                <td>
+                                    <span class="status-tag {{ item.get_status|lower }}">
+                                        <i class="fa-solid {% if item.get_status == 'Good' %}fa-check{% else %}fa-triangle-exclamation{% endif %}"></i>
+                                        {{ item.get_status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <input type="number" name="qty_{{ item.item_id }}" class="qty-input" placeholder="0" step="0.1">
+                                        <span class="unit-select" style="border:none; background:transparent; font-weight:800;">
+                                            {{ item.unit }}
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding: 40px; color: #64748b;">
+                                    No items found in database. 
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="table-footer">
+                        <button type="submit" class="save-btn">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+    <script src="{% static 'Shree1/js/inventory.js' %}"></script>
+</body>
+</html>

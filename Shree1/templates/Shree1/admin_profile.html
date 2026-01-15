@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Settings - Admin | SHREE</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'Shree1/css/admin_profile.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo-section">
+          <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+          <div>
+            <h2 class="logo-name">SHREE</h2>
+            <p style="font-size: 10px; color: #94a3b8">
+          Smart Hostel Record & Employee Evaluation
+        </p>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <a href="{% url 'admin_dashboard' %}" class="nav-item">
+            <i class="fa-solid fa-table-cells-large"></i> Dashboard
+          </a>
+
+          <a href="{% url 'admin_user_management' %}" class="nav-item">
+            <i class="fa-solid fa-user-group"></i> User Management
+          </a>
+
+          <a href="{% url 'admin_attendance' %}" class="nav-item">
+            <i class="fa-regular fa-calendar-check"></i> Attendance
+          </a>
+
+          <a href="{% url 'admin_inventory' %}" class="nav-item">
+            <i class="fa-solid fa-box-open"></i> Inventory
+          </a>
+
+          <a href="{% url 'admin_employee_evaluation' %}" class="nav-item">
+            <i class="fa-regular fa-star"></i> Employee Evaluation
+          </a>
+
+          <a href="{% url 'admin_leave_Management' %}" class="nav-item">
+            <i class="fa-solid fa-file-contract"></i> Leave Management
+          </a>
+
+          <a href="{% url 'admin_salary' %}" class="nav-item">
+            <i class="fa-solid fa-indian-rupee-sign"></i> Salary
+          </a>
+
+          <a href="{% url 'admin_reports' %}" class="nav-item">
+            <i class="fa-solid fa-chart-column"></i> Reports
+          </a>
+
+          <a href="{% url 'admin_profile' %}" class="nav-item active">
+            <i class="fa-regular fa-user"></i> Profile
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-header">
+          <div class="user-info">
+            <span class="user-name">slzmdl</span>
+            <span class="user-role">Admin</span>
+          </div>
+          <a href="{% url 'logout' %}" class="logout-link">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </a>
+        </header>
+
+        <section class="page-header">
+          <h1>Profile Settings</h1>
+          <p>Manage your account information</p>
+        </section>
+
+        <div class="profile-card">
+          <form class="profile-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" value="slzmdl" />
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" value="slzmdl@gmail.com" />
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" value="+91 98765 43210" />
+              </div>
+              <div class="form-group">
+                <label>Employee ID</label>
+                <input type="text" value="EMP001" readonly class="readonly" />
+              </div>
+              <div class="form-group">
+                <label>Department</label>
+                <input type="text" value="Kitchen" readonly class="readonly" />
+              </div>
+              <div class="form-group">
+                <label>Joining Date</label>
+                <input
+                  type="text"
+                  value="15-01-2024"
+                  readonly
+                  class="readonly"
+                />
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label>Address</label>
+              <textarea rows="2">123 Main Street, City, State</textarea>
+            </div>
+            <button type="button" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Save Changes
+            </button>
+          </form>
+
+          <hr class="divider" />
+
+          <div class="password-section">
+            <h3>Change Password</h3>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label>Current Password</label>
+                <input type="password" placeholder="••••••••" />
+              </div>
+              <div class="form-group full-width">
+                <label>New Password</label>
+                <input type="password" placeholder="Enter new password" />
+              </div>
+              <div class="form-group full-width">
+                <label>Confirm New Password</label>
+                <input type="password" placeholder="Confirm new password" />
+              </div>
+            </div>
+            <button type="button" class="btn-primary">Update Password</button>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="Shree1/js/admin_profile.js"></script>
+    </body>
+</html>

@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHREE - Warden Profile</title>
+    <link rel="stylesheet" href="{% static 'Shree1/css/dashboardWarden.css' %}">
+    <link rel="stylesheet" href="{% static 'Shree1/css/warden_profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">S</div>
+                <div>
+                    <h2 class="logo-name">SHREE</h2>
+                    <p class="logo-tagline">Smart Hostel Record & Employee Evaluation</p>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="{% url 'warden_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-table-columns nav-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="{% url 'attendance' %}" class="nav-item {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
+                    <i class="fa-solid fa-calendar-check nav-icon"></i>
+                    <span>Attendance</span>
+                </a>
+                
+                <a href="{% url 'inventory' %}" class="nav-item {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}">
+                    <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                    <span>Inventory</span>
+                </a>
+                
+                <a href="{% url 'warden_leave' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_leave' %}active{% endif %}">
+                    <i class="fa-solid fa-envelope nav-icon"></i>
+                    <span>Leave Management</span>
+                </a>
+                
+                <a href="{% url 'warden_profile' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_profile' %}active{% endif %}">
+                    <i class="fa-regular fa-user nav-icon"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="user-info">
+                    <span class="user-name">Warden Account</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+                <button class="logout-btn" onclick="location.href='{% url 'welcome_role' %}'">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </header>
+
+            <section class="page-header">
+                <div class="header-text">
+                    <h1>Profile Settings</h1>
+                    <p>Manage your account details and preferences</p>
+                </div>
+            </section>
+
+            <div class="profile-card">
+                <form class="profile-form" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-signature"></i> Full Name</label>
+                            <input type="text" placeholder="Enter Full Name" value="Rajesh Kumar">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+                            <input type="email" placeholder="email@example.com" value="warden@shree.com">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+                            <input type="text" placeholder="Contact Number" value="+91 98765 43210">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-id-badge"></i> Warden ID</label>
+                            <input type="text" placeholder="ID Number" value="WD-2024-001" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-building"></i> Department</label>
+                            <input type="text" placeholder="Department Name" value="Hostel Administration">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-days"></i> Date of Joining</label>
+                            <input type="date" value="2023-01-15">
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label><i class="fa-solid fa-map-location-dot"></i> Residential Address</label>
+                        <textarea rows="3" placeholder="Full Campus Address">Block A, Staff Quarters, SHREE Campus</textarea>
+                    </div>
+
+                    <div class="action-section">
+                        <button type="button" class="btn-save-attractive">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

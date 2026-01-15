@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHREE - Supplier Dashboard</title>
+    <link rel="stylesheet" href="{% static 'Shree1/css/dashboardSupplier.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">S</div>
+                <div>
+                    <h2 class="logo-name">SHREE</h2>
+                    <p class="logo-tagline">Smart Hostel Record</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="{% url 'supplier_dashboard' %}" class="nav-item active">
+                    <i class="fa-solid fa-table-cells-large"></i> Dashboard
+                </a>
+                <a href="{% url 'supplier_profile' %}" class="nav-item">
+                    <i class="fa-regular fa-user"></i> Profile
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="user-info">
+                    <span class="user-name">{{ user.username|title }}</span>
+                    <span class="user-role">Official Supplier</span>
+                </div>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="logout-btn" type="submit">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </form>
+            </header>
+
+            <section class="dashboard-intro">
+                <h1>Supplier Dashboard</h1>
+                <p>Manage deliveries and track requests in real-time</p>
+            </section>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <p>Items in Queue</p>
+                        <h3>{{ pending.count }}</h3>
+                    </div>
+                    <div class="stat-icon blue-light-bg"><i class="fa-solid fa-box-archive"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <p>Sent to Hostel</p>
+                        <h3>{{ sent.count }}</h3>
+                    </div>
+                    <div class="stat-icon orange-light-bg"><i class="fa-regular fa-clock"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <p>Total Stock Items</p>
+                        <h3>{{ total_items_count }}</h3>
+                    </div>
+                    <div class="stat-icon green-light-bg"><i class="fa-solid fa-list-check"></i></div>
+                </div>
+            </div>
+
+            <div class="card-panel table-section">
+                <h3><i class="fa-solid fa-truck-loading"></i> Pending Deliveries (Action Required)</h3>
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Deficit / Gap</th>
+                            <th>Target Stock</th>
+                            <th>Mark Delivered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in pending %}
+                        <tr>
+                            <td class="id-cell">#{{ item.item_id }}</td>
+                            <td><strong>{{ item.item_name }}</strong></td>
+                            <td class="qty-text red-text">Need: {{ item.deficit }} {{ item.unit }}</td>
+                            <td>{{ item.required_stock }} {{ item.unit }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'supplier_dashboard' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" onchange="this.form.submit()">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding: 40px; color: #64748b;">
+                                <i class="fa-solid fa-circle-check" style="color: #16a34a; font-size: 2rem;"></i><br>
+                                No pending delivery requests. All stock is sufficient!
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-panel table-section" style="margin-top: 30px;">
+                <h3><i class="fa-solid fa-truck-fast"></i> Sent / At Gate (Pending Warden Entry)</h3>
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Quantity Context</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in sent %}
+                        <tr>
+                            <td class="id-cell">#{{ item.item_id }}</td>
+                            <td>{{ item.item_name }}</td>
+                            <td>Awaiting stock update</td>
+                            <td><span class="status-badge delivered">In Transit / At Gate</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align:center; padding: 20px;">No items currently in transit.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+/* ================== GLOBAL VARIABLES & RESET ================== */
+:root {
+    --primary-blue: #2563eb;
+    --bg-light: #f8fafc;
+    --text-dark: #1e293b;
+    --text-gray: #64748b;
+    --danger-red: #ef4444;
+    --success-green: #10b981;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', sans-serif; 
+}
+
+body { 
+    background-color: var(--bg-light); 
+    color: var(--text-dark); 
+}
+
+.container { 
+    display: flex; 
+    min-height: 100vh; 
+}
+
+/* ================== SIDEBAR (Standardized) ================== */
+.sidebar { 
+    width: 260px; 
+    background: white; 
+    border-right: 1px solid #e2e8f0; 
+    padding: 20px; 
+}
+
+.logo-section { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    margin-bottom: 40px; 
+}
+
+/* Corrected Logo Style */
+.nav-logo-file {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.logo-name { font-size: 1.5rem; color: #334155; }
+.logo-tagline { font-size: 0.75rem; color: #94a3b8; }
+
+.nav-menu { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    padding: 0 5px;
+}
+
+.nav-item { 
+    text-decoration: none; 
+    color: #64748b; 
+    padding: 12px 15px; 
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+    transition: all 0.2s;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.nav-icon { width: 24px; margin-right: 12px; font-size: 1.1rem; text-align: center; }
+
+/* Hover & Active States */
+.nav-item:hover:not(.active) { background: #f1f5f9; color: #334155; }
+
+.nav-item.active { 
+    background: #eff6ff; 
+    color: var(--primary-blue); 
+    font-weight: 600; 
+}
+.nav-item.active .nav-icon { color: var(--primary-blue); }
+
+/* ================== MAIN LAYOUT ================== */
+.main-content { flex: 1; padding: 30px; }
+
+.top-header { 
+    display: flex; 
+    justify-content: flex-end; 
+    margin-bottom: 30px; 
+}
+
+.user-info {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    justify-content: center;
+}
+
+.user-name { font-weight: 600; color: #334155; }
+.user-role { font-size: 0.85rem; color: #64748b; }
+
+.logout-btn { 
+    background: white; 
+    color: var(--danger-red); 
+    border: 1px solid #fee2e2; 
+    padding: 8px 15px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    transition: background 0.2s;
+}
+.logout-btn:hover { background: #fef2f2; }
+
+/* ================== ATTENDANCE SPECIFIC STYLES ================== */
+
+/* Page Header & Save Button */
+.page-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.save-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.save-btn:hover { background-color: #1d4ed8; }
+
+/* Content Card */
+.content-card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+/* Date Section */
+.date-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.date-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.date-wrapper i {
+    position: absolute;
+    left: 12px;
+    color: #64748b;
+    z-index: 1;
+}
+
+.date-input {
+    padding: 10px 15px 10px 38px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #334155;
+    outline: none;
+    width: 160px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.date-label { color: #64748b; font-size: 14px; }
+
+/* Table Styling */
+.attendance-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px; /* Spacing between rows */
+}
+
+.attendance-table th {
+    text-align: left;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.attendance-table td {
+    padding: 10px 0;
+    color: #334155;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+/* Toggle Buttons */
+.btn-group { display: flex; gap: 10px; }
+
+.status-btn {
+    padding: 8px 24px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #e2e8f0; /* Default Gray */
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+/* Active States */
+.status-btn.present.active {
+    background-color: var(--success-green);
+    color: white;
+}
+
+.status-btn.absent.active {
+    background-color: var(--danger-red);
+    color: white;
+}
+
+/* Summary Section */
+.summary-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.summary-footer h3 {
+    font-size: 16px;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.sum-card {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.sum-card span {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.sum-card h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Specific Card Colors */
+.card-green { background-color: #f0fdf4; }
+.card-green span { color: #15803d; }
+.card-green h2 { color: #16a34a; }
+
+.card-red { background-color: #fef2f2; }
+.card-red span { color: #991b1b; }
+.card-red h2 { color: #dc2626; }
+
+.card-blue { background-color: #eff6ff; }
+.card-blue span { color: #1e40af; }
+.card-blue h2 { color: #2563eb; }
+

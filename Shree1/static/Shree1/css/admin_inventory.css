@@ -1,0 +1,136 @@
+/* Layout Alignment */
+.page-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+/* Add Button */
+.add-btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+.add-btn:hover {
+    background-color: #1d4ed8;
+}
+
+/* Stats Cards */
+.inventory-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.stat-card span {
+    display: block;
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+/* Text Colors */
+.text-red { color: #dc2626; }
+.text-orange { color: #ea580c; }
+.text-green { color: #16a34a; }
+.font-bold { font-weight: 600; }
+
+/* Table Container */
+.content-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Table Styling */
+.inventory-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+
+.inventory-table th {
+    text-align: left;
+    color: #475569;
+    font-weight: 700;
+    font-size: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.inventory-table td {
+    padding: 10px 0;
+    color: #334155;
+    font-size: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Item ID Badge */
+.id-badge {
+    font-family: monospace;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* Item Icon */
+.item-icon {
+    color: #94a3b8;
+    margin-right: 8px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Date Subtext */
+.date-sub {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-left: 5px;
+}
+.nav-logo-file {
+    width: 50px !important;  /* !important forces the browser to obey */
+    height: 50px !important;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}

@@ -1,0 +1,11 @@
+[33m39bb90f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Resolved urls.py and merged team changes
+[33m8dc567a[m Merge branch 'main' of https://github.com/Snehasharma2419/Shree
+[33me2a0490[m Warden Files by Sneha
+[33mc69ce6d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m warden full corrected
+[33m917c691[m Updated all files and database changes
+[33me0813d9[m Moved manage.py and db.sqlite3 to the main folder
+[33md994d8d[m Initial Django setup
+[33m1971d14[m Initial Django setup
+[33ma40371d[m Fixed Shree1: changed from submodule to normal folder
+[33m7df427c[m Upload entire Django project with Shree1 subfolder
+[33m00de9b0[m initial django project setup
