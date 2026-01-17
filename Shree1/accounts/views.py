@@ -7,10 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Count
 from django.db.models import F
-from datetime import datetime
-
-
-
+from datetime import datetime, date
+from django.db import transaction
 
 def login_selection(request):
     return render(request, 'Shree1/login_role.html')
@@ -58,7 +56,7 @@ def worker_signup_view(request):
             messages.error(request, error)
             return render(request, 'Shree1/signupWorker.html')
 
-        # 2. UniversityID Record Check
+        # 2. UniversityID Check (Check if authorized and unused)
         record = UniversityID.objects.filter(
             university_id=user_id,
             role='worker',
@@ -78,39 +76,42 @@ def worker_signup_view(request):
             role='worker'
         )
 
-        # 4. Create the Worker Profile (Corrected syntax)
-        Worker.objects.create(
-            user=new_user,
-            worker_id=user_id,
-            name=full_name
-        )
+        # 4. !!! UPDATED: Link to EXISTING Worker Profile !!!
+        try:
+            worker_profile = Worker.objects.get(worker_id=user_id)
+            worker_profile.user = new_user
+            worker_profile.save()
+        except Worker.DoesNotExist:
+            # Fallback agar Admin ne pre-fill nahi kiya tha
+            Worker.objects.create(user=new_user, worker_id=user_id, name=full_name)
 
         # 5. Mark record as used
         record.is_used = True
         record.save()
 
-        # 6. IMPORTANT: Login the user so the session starts
+        # 6. Login the user
         login(request, new_user)
-
-        messages.success(request, f"Welcome {full_name}! Registration successful.")
+        messages.success(request, f"Welcome {full_name}!")
         return redirect('worker_dashboard')
 
     return render(request, 'Shree1/signupWorker.html')
 
+
 def warden_signup_view(request):
     if request.method == "POST":
-        # 1. Variables ko theek se capture karein (HTML 'name' attribute se match hona chahiye)
-        u_id = request.POST.get('user_id', '').strip()  # Iska naam u_id rakhte hain
+        # 1. Variables capture karein
+        u_id = request.POST.get('user_id', '').strip()
         full_name = request.POST.get('full_name', '').strip()
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Basic Validation
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match.")
+        # 2. Password Validation
+        error = validate_password(password, confirm_password)
+        if error:
+            messages.error(request, error)
             return render(request, 'Shree1/signupWarden.html')
 
-        # 2. UniversityID check karein
+        # 3. UniversityID Check (Check if authorized and not yet used)
         record = UniversityID.objects.filter(
             university_id=u_id,
             role='warden',
@@ -118,34 +119,35 @@ def warden_signup_view(request):
         ).first()
 
         if not record:
-            messages.error(request, "Invalid University ID or ID already in use.")
+            messages.error(request, "Invalid ID or Account already exists.")
             return render(request, 'Shree1/signupWarden.html')
 
-        # 3. User Create Karein (Yahan dhayan dein variables par)
+        # 4. Central User Create Karein
         new_user = User.objects.create_user(
-            username=u_id,          # u_id use karein
-            university_id=u_id,     # u_id use karein
+            username=u_id,
+            university_id=u_id,
             first_name=full_name,
             password=password,
             role='warden'
         )
 
-        # 4. Warden Profile Create Karein
-        Warden.objects.create(
-            user=new_user,
-            warden_id=u_id,         # u_id use karein
-            name=full_name
-        )
+        # 5. !!! CRITICAL CHANGE: Link to EXISTING Profile !!!
+        # Naya create karne ke bajaye existing profile ko update karein
+        try:
+            warden_profile = Warden.objects.get(warden_id=u_id)
+            warden_profile.user = new_user  # Auth user link kar diya
+            warden_profile.save()
+        except Warden.DoesNotExist:
+            # Backup: Agar Admin ne profile nahi banayi thi, toh yahan bana dein
+            Warden.objects.create(user=new_user, warden_id=u_id, name=full_name)
 
-        # Record mark karein as used
+        # 6. Mark ID as used
         record.is_used = True
         record.save()
 
-        # 5. Login and Redirect
-        from django.contrib.auth import login
+        # 7. Login and Redirect
         login(request, new_user)
-        
-        messages.success(request, "Welcome, Warden!")
+        messages.success(request, f"Welcome Warden {full_name}!")
         return redirect('warden_dashboard')
 
     return render(request, 'Shree1/signupWarden.html')
@@ -157,11 +159,13 @@ def supplier_signup_view(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
+        # 1. Password Validation
         error = validate_password(password, confirm_password)
         if error:
             messages.error(request, error)
             return render(request, 'Shree1/signupSupplier.html')
 
+        # 2. UniversityID Check
         record = UniversityID.objects.filter(
             university_id=user_id,
             role='supplier',
@@ -169,9 +173,10 @@ def supplier_signup_view(request):
         ).first()
 
         if not record or record.full_name != full_name:
-            messages.error(request, "Access Denied: Invalid credentials or name mismatch.")
+            messages.error(request, "Access Denied: Invalid ID or name mismatch.")
             return render(request, 'Shree1/signupSupplier.html')
 
+        # 3. Create central User
         new_user = User.objects.create_user(
             username=user_id,
             university_id=user_id,
@@ -180,15 +185,20 @@ def supplier_signup_view(request):
             role='supplier'
         )
 
-        # NEW: Create the specific Supplier profile table entry (ER Match)
-        Supplier.objects.create(
-            user=new_user,
-            supplier_id=user_id, 
-            name=full_name     
-        )
+        # 4. !!! UPDATED: Link to EXISTING Supplier Profile !!!
+        try:
+            supplier_profile = Supplier.objects.get(supplier_id=user_id)
+            supplier_profile.user = new_user
+            supplier_profile.save()
+        except Supplier.DoesNotExist:
+            Supplier.objects.create(user=new_user, supplier_id=user_id, name=full_name)
 
+        # 5. Mark used and Login
         record.is_used = True
         record.save()
+        login(request, new_user)
+        
+        messages.success(request, f"Welcome {full_name}!")
         return redirect('supplier_dashboard')
 
     return render(request, 'Shree1/signupSupplier.html')
@@ -198,33 +208,40 @@ def supplier_signup_view(request):
 # -------------------------------
 
 
-@login_required
+@login_required(login_url='warden_login')
 def warden_dashboard(request):
-    # 1. Warden profile fetch karenge
     try:
-        warden_profile = Warden.objects.get(user=request.user)
+        warden = Warden.objects.get(user=request.user)
     except Warden.DoesNotExist:
-        return redirect('welcome_role') 
+        return redirect('warden_login')
 
-    # 2. DYNAMIC STATS (Using Master List)
-    # Hum 'UniversityID' use karenge taaki signed-up + non-signed-up dono count ho ske
-    worker_count = UniversityID.objects.filter(role='worker').count()
-
-    # 3. Today's Attendance Dynamic Count
-    today = timezone.now().date()
-    present_today = Attendance.objects.filter(date=today, status='Present').count()
+    # Data Fetching
+    worker_count = Worker.objects.count()
     
-    # 4. Pseudo Data (Hardcoded for now)
-    context = {
-        'warden': warden_profile,
-        'worker_count': worker_count,      # Real count from Master List
-        'present_count': present_today,    # Real count from Attendance Table
-        'pending_leaves': 3,               # Placeholder pseudo value for now
-        'low_stock_count': 5,              # Placeholder
-        'tasks_completed': 12,             # Placeholder
-    }
-    return render(request, 'Shree1/dashboardWarden.html', context)
+    # Sirf Pending requests fetch karein (Dashboard ke liye top 3)
+    pending_requests = LeaveRequest.objects.filter(status='Pending').order_by('-created_at')[:3]
+    pending_count = LeaveRequest.objects.filter(status='Pending').count()
 
+    # Low Stock Logic (Agar current stock 50% se kam hai)
+    # Note: Aapke Model mein 'Inventory' table honi chahiye
+    low_stock_items = []
+    # Static fallback agar model abhi ready nahi hai, warna niche wala logic use karein:
+    # low_stock_items = Inventory.objects.filter(current_stock__lt=F('required_stock')*0.5)
+
+    return render(request, 'Shree1/dashboardWarden.html', {
+        'warden': warden,
+        'worker_count': worker_count,
+        'pending_requests': pending_requests,
+        'pending_count': pending_count,
+        'low_stock_items': [
+            {'name': 'Rice', 'current': 50, 'required': 100, 'percent': 50},
+            {'name': 'Cooking Oil', 'current': 15, 'required': 30, 'percent': 50},
+            {'name': 'Cleaning Supplies', 'current': 5, 'required': 20, 'percent': 25},
+        ]
+    })
+
+from django.utils import timezone
+from django.contrib import messages
 
 @login_required
 def attendance_view(request):
@@ -233,68 +250,85 @@ def attendance_view(request):
     except Warden.DoesNotExist:
         return redirect('welcome_role')
 
-    # role='worker' filter 
     master_list = UniversityID.objects.filter(role='worker')
+    today_date = timezone.now().date() # Server ki aaj ki date
 
     if request.method == "POST":
         date_str = request.POST.get('attendance_date')
+        
+        # --- DATE RESTRICTION LOGIC ---
+        # Agar user aaj ke ilawa koi aur date bhejta hai, toh error show karein
+        if date_str != str(today_date):
+            messages.error(request, "Attendance sirf aaj ki date (Today) ke liye li ja sakti hai!")
+            return redirect('attendance')
+
         for person in master_list:
-            # HTML form se status fetch karein
             status = request.POST.get(f'status_{person.university_id}')
             if status:
                 Attendance.objects.update_or_create(
-                    # Humne model mein isse worker_master banaya hai
                     worker_master=person, 
                     date=date_str,
                     defaults={'status': status, 'warden': warden}
                 )
+        messages.success(request, f"Attendance for {today_date} has been saved.")
         return redirect('attendance')
 
     context = {
-        'workers': master_list, # Template ke liye name 'workers' hi rakhein
-        'today': timezone.now().date().strftime('%Y-%m-%d'),
+        'workers': master_list,
+        'today': today_date.strftime('%Y-%m-%d'),
         'warden': warden
     }
     return render(request, 'Shree1/warden_attendance.html', context)
 
-
 @login_required
 def worker_dashboard(request):
     try:
-        # 1. Pehle logged-in user ki Worker profile nikalte hain
+        # 1. Profile aur Master Record Linkage (Aapka Security Logic)
         worker_profile = Worker.objects.get(user=request.user)
-        
-        # 2. Worker profile se uski 'worker_id' uthate hain (Jo University ID hai)
-        # Aur Master Table (UniversityID) se uska pura record match karte hain
         master_record = UniversityID.objects.get(university_id=worker_profile.worker_id)
 
     except (Worker.DoesNotExist, UniversityID.DoesNotExist):
-        # Agar worker profile nahi milti toh logout ya error page par bhej dein
         return redirect('welcome_role')
 
-    # 3. DYNAMIC DATA: Attendance Table se records nikalna
-    # Hum 'worker_master' field use kar rahe hain jo seedha UniversityID se linked hai
-    attendance_list = Attendance.objects.filter(
-        worker_master=master_record
-    ).order_by('-date')[:5] # Latest 5 records
+    # 2. Attendance Metrics (Aapke Friend ka Dynamic Logic)
+    # Pura record fetch karna summary ke liye
+    all_attendance = Attendance.objects.filter(worker_master=master_record)
+    
+    # Latest 5 records table mein dikhane ke liye (Aapka Filter)
+    latest_attendance = all_attendance.order_by('-date')[:5]
 
-    # Kitne din Present raha (Total Count)
-    total_present = Attendance.objects.filter(
-        worker_master=master_record, 
-        status='Present'
+    present_days = all_attendance.filter(status='Present').count()
+    total_days = all_attendance.count()
+
+    # 3. Dynamic Leave & Notifications (Added New Features)
+    # Worker ki pending leaves count karna
+    pending_leaves = LeaveRequest.objects.filter(
+        worker=worker_profile, 
+        status='Pending'
     ).count()
 
-    context = {
-        'username': master_record.full_name, # Master List wala real name
-        'role': 'Worker',
-        'attendance_list': attendance_list,
-        'total_present': total_present,
-        'salary': '15,000', # Pseudo (Isse baad mein Attendance se link karenge)
-        'leave_balance': '5', # Pseudo
-        'notifications_count': '3', # Pseudo
-    }
-    return render(request, 'Shree1/dashboardWorker.html', context)
+    # Leave balance (Worker profile table se real data)
+    # Agar model mein leave_balance field hai toh:
+    leave_balance = getattr(worker_profile, 'leave_balance', 0)
 
+    context = {
+        # Profile Data
+        'worker': worker_profile,
+        'master': master_record,
+        'full_name': master_record.full_name,
+        
+        # Attendance Data
+        'attendance_list': latest_attendance,
+        'present_days': present_days,
+        'total_days': total_days,
+        
+        # New Dynamic Features
+        'leave_balance': leave_balance,
+        'notifications_count': pending_leaves, # Pending requests ko as notification dikhayenge
+        'salary': 15000, # Abhi static hai, baad mein calculation logic lagayenge
+    }
+
+    return render(request, 'Shree1/dashboardWorker.html', context)
 
 
 from django.db.models import F
@@ -330,11 +364,41 @@ def supplier_dashboard(request):
     })
 
 
+@login_required
 def worker_profile(request):
-    return render(request, 'Shree1/workerProfile.html')
+    try:
+        worker = Worker.objects.get(user=request.user)
+    except Worker.DoesNotExist:
+        return redirect('welcome_role')
+
+    # -------- SAVE DATA --------
+    if request.method == "POST":
+        request.user.email = request.POST.get("email")
+        request.user.phone = request.POST.get("phone")
+        request.user.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect('worker_profile')
+
+    # -------- DISPLAY DATA --------
+    context = {
+        # 🔝 RIGHT TOP HEADER
+         "display_name": worker.name,   # 👈 RIYA (DB se)
+    "display_role": "Worker",
+
+        # 📝 PROFILE FORM
+        "full_name": worker.name,
+        "employee_id": worker.worker_id,
+        "email": request.user.email,
+        "phone": request.user.phone,
+        "joining_date": request.user.date_joined.strftime("%d %B %Y"),
+
+    }
+
+    return render(request, "Shree1/workerProfile.html", context)
 
 def supplier_profile(request):
-    return render(request, 'Shree1/suppierProfile.html')
+    return render(request, 'Shree1/supplierProfile.html')
 
 
 from django.db.models import Q
@@ -408,10 +472,6 @@ def update_inventory_stock(request):
             
     return redirect('inventory')
 
-
-
-
-@login_required
 def warden_leave_view(request):
     try:
         current_warden = Warden.objects.get(user=request.user)
@@ -420,78 +480,90 @@ def warden_leave_view(request):
         return redirect('login')
 
     if request.method == "POST":
-        w_id = request.POST.get('worker_id')
-        l_type = request.POST.get('leave_type')
-        s_date = request.POST.get('start_date')
-        e_date = request.POST.get('end_date')
-        l_reason = request.POST.get('reason', '')
+        action_type = request.POST.get('action_type')
+        leave_type = request.POST.get('leave_type')
+        start_date_val = request.POST.get('start_date')
+        end_date_val = request.POST.get('end_date')
+        reason = request.POST.get('reason')
 
-        # Debugging prints
-        print(f"DEBUG: w_id={w_id}, l_type={l_type}, s_date={s_date}")
+        try:
+            s_date = date.fromisoformat(start_date_val)
+            e_date = date.fromisoformat(end_date_val)
+        except ValueError:
+            messages.error(request, "Invalid date format.")
+            return redirect('warden_leave')
 
-        if w_id and l_type and s_date and e_date:
-            try:
-                LeaveRequest.objects.create(
-                    worker_id=w_id, # worker_id is the PK of Worker model
-                    warden=current_warden,
-                    leave_type=l_type,
-                    start_date=s_date,
-                    end_date=e_date,
-                    reason=l_reason,
-                    status='Pending'
-                )
-                messages.success(request, "Leave request submitted to Admin!")
-                return redirect('warden_leave')
-            except Exception as e:
-                print(f"DB Error: {e}")
-                messages.error(request, f"Error: {e}")
+        if s_date < date.today():
+            messages.error(request, "Pichli dates valid nahi hain.")
+            return redirect('warden_leave')
+
+        if action_type == 'self':
+            LeaveRequest.objects.create(
+                warden=current_warden,
+                is_warden_request=True,
+                leave_type=leave_type,
+                start_date=s_date,
+                end_date=e_date,
+                reason=reason
+            )
+            messages.success(request, "Warden leave request created.")
         else:
-            messages.error(request, "Validation Failed: All fields are required.")
+            w_id = request.POST.get('worker_id') 
+            try:
+                # Reflection logic ensure karta hai ki UniversityID add hote hi 
+                # Worker profile ban jati hai
+                worker_obj = Worker.objects.get(worker_id=w_id)
+                LeaveRequest.objects.create(
+                    worker=worker_obj,
+                    warden=current_warden,
+                    is_warden_request=False,
+                    leave_type=leave_type,
+                    start_date=s_date, 
+                    end_date=e_date,
+                    reason=reason
+                )
+                messages.success(request, f"Request for {worker_obj.name} created.")
+            except Worker.DoesNotExist:
+                messages.error(request, "Worker record not found in profile table.")
 
-    # Data for frontend
-    workers = Worker.objects.all()
-    pending = LeaveRequest.objects.filter(warden=current_warden, status='Pending')
-    history = LeaveRequest.objects.filter(warden=current_warden).exclude(status='Pending').order_by('-created_at')
+        return redirect('warden_leave')
 
-    return render(request, 'Shree1/warden_leave.html', {
-        'workers': workers, 
-        'pending': pending, 
-        'history': history, 
-        'warden': current_warden
-    })
+    # UPDATED: Seedha UniversityID table se workers ko filter karein
+    context = {
+        'workers': UniversityID.objects.filter(role='worker'), 
+        'today': date.today().strftime('%Y-%m-%d'),
+        'warden': current_warden,
+        'pending': LeaveRequest.objects.filter(warden=current_warden, status='Pending'),
+        'history': LeaveRequest.objects.filter(warden=current_warden).exclude(status='Pending')
+    }
+    return render(request, 'Shree1/warden_leave.html', context)
+
+
+
+
 
 @login_required
 def warden_profile(request):
-    # Logged-in Warden ki profile nikalna
     try:
         warden = Warden.objects.get(user=request.user)
     except Warden.DoesNotExist:
         return redirect('welcome_role')
 
-    if request.method == "POST":
-        # Form se data uthana
-        new_name = request.POST.get('full_name')
-        new_phone = request.POST.get('phone')
-        new_address = request.POST.get('address')
-        new_email = request.POST.get('email')
+    context = {
+        "display_name": warden.name,        # header name
+        "display_role": "Warden",           # header role
 
-        # Database mein update karna
-        warden.name = new_name
-        warden.phone = new_phone
-        # Agar aapne address field model mein banayi hai
-        if hasattr(warden, 'address'):
-            warden.address = new_address
-        
-        warden.save()
+        "full_name": warden.name,           # form
+        "email": request.user.email,
+        "phone": request.user.phone,
+        "warden_id": warden.warden_id,
+        "joining_date": "",                 # (optional / future)
+    }
 
-        # Email user table mein hoti hai
-        user = request.user
-        user.email = new_email
-        user.save()
+    return render(request, "Shree1/warden_profile.html", context)
 
-        return redirect('warden_profile')
 
-    return render(request, 'Shree1/warden_profile.html', {'warden': warden})
+
 
 def admin_dashboard(request):
     # 1. Fetch Totals for the Statistic Cards
@@ -560,8 +632,6 @@ def admin_login(request):
         messages.error(request, "Invalid Admin Credentials")
     return render(request, 'Shree1/loginAdmin.html')
 
-
-# Admin view ya action mein ye logic dalna hai
 def approve_leave_logic(request, leave_request_id):
     leave_req = LeaveRequest.objects.get(id=leave_request_id)
     
@@ -591,39 +661,5 @@ def approve_leave_logic(request, leave_request_id):
             
     return redirect('admin_dashboard') # Ya jahan aapka admin dashboard ho
 
-@login_required
-def admin_user_management(request):
-    # Registered Profiles
-    wardens = Warden.objects.all()
-    workers = Worker.objects.all()
-    
-    # Authorized IDs (Jo abhi signup ke liye pending hain)
-    auth_ids = UniversityID.objects.all().order_by('-id') # Saari IDs dekhne ke liye
-
-    return render(request, 'Shree1/admin_user_management.html', {
-        'wardens': wardens,
-        'workers': workers,
-        'auth_ids': auth_ids # Ise template mein use karenge
-    })
-
-def add_university_id(request):
-    if request.method == "POST":
-        full_name = request.POST.get('full_name')
-        uni_id = request.POST.get('uni_id')
-        role = request.POST.get('role')
-        
-        UniversityID.objects.create(
-            university_id=uni_id,
-            full_name=full_name,
-            role=role
-        )
-        messages.success(request, f"ID {uni_id} authorized for {role} role.")
-    return redirect('admin_user_management')
-
-def delete_user(request, user_id):
-    user = User.objects.get(id=user_id)
-    # Reset university ID status
-    UniversityID.objects.filter(university_id=user.university_id).update(is_used=False)
-    user.delete()
-    messages.success(request, "User deleted successfully.")
-    return redirect('admin_user_management')
+def forget_password(request):
+    return render(request, 'Shree1/forget_password.html')

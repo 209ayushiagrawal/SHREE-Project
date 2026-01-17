@@ -51,9 +51,10 @@
         <main class="main-content">
             <header class="top-header">
                 <div class="user-info">
-                    <span class="user-name">Warden Account</span>
-                    <span class="user-role">Administrator</span>
-                </div>
+    <span class="user-name">{{ display_name }}</span>
+    <span class="user-role">{{ display_role }}</span>
+</div>
+
                 <button class="logout-btn" onclick="location.href='{% url 'welcome_role' %}'">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </button>
@@ -73,37 +74,31 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label><i class="fa-solid fa-signature"></i> Full Name</label>
-                            <input type="text" placeholder="Enter Full Name" value="Rajesh Kumar">
+                            <input type="text" name="full_name" value="{{ full_name }}">
+
                         </div>
                         <div class="form-group">
                             <label><i class="fa-solid fa-envelope"></i> Email Address</label>
-                            <input type="email" placeholder="email@example.com" value="warden@shree.com">
-                        </div>
+                        <input type="email" name="email" value="{{ email }}">
+ </div>
                         <div class="form-group">
                             <label><i class="fa-solid fa-phone"></i> Phone Number</label>
-                            <input type="text" placeholder="Contact Number" value="+91 98765 43210">
-                        </div>
+                           <input type="text" name="phone" value="{{ phone }}">
+</div>
                         <div class="form-group">
                             <label><i class="fa-solid fa-id-badge"></i> Warden ID</label>
-                            <input type="text" placeholder="ID Number" value="WD-2024-001" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fa-solid fa-building"></i> Department</label>
-                            <input type="text" placeholder="Department Name" value="Hostel Administration">
-                        </div>
+                            <input type="text" value="{{ warden_id }}" readonly style="background-color:#f1f5f9;">
+</div>
+                        
                         <div class="form-group">
                             <label><i class="fa-solid fa-calendar-days"></i> Date of Joining</label>
-                            <input type="date" value="2023-01-15">
-                        </div>
+                            <input type="text" value="{{ joining_date }}" readonly>
+</div>
                     </div>
 
-                    <div class="form-group full-width">
-                        <label><i class="fa-solid fa-map-location-dot"></i> Residential Address</label>
-                        <textarea rows="3" placeholder="Full Campus Address">Block A, Staff Quarters, SHREE Campus</textarea>
-                    </div>
-
+                    
                     <div class="action-section">
-                        <button type="button" class="btn-save-attractive">
+                        <button type="submit " class="btn-save-attractive">
                             <i class="fa-solid fa-floppy-disk"></i> Save Changes
                         </button>
                     </div>

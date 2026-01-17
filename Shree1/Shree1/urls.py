@@ -34,10 +34,6 @@ urlpatterns = [
    path('Shree-admin/leave/', views.admin_leave_Management, name='admin_leave_Management'),
    
    path('Shree-admin/profile/', views.admin_profile, name='admin_profile'),
-   
-    path('Shree-admin/evaluation/', views.admin_employee_evaluation, name='admin_employee_evaluation'),
-    
-    path('Shree-admin/reports/', views.admin_reports, name='admin_reports'),
     
     path('Shree-admin/salary/', views.admin_salary, name='admin_salary'),
 ]

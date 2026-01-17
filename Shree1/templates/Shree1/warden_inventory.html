@@ -12,13 +12,15 @@
 <body>
     <div class="container">
         <aside class="sidebar">
-            <div class="logo-section">
-                <div class="logo-icon">S</div>
-                <div>
-                    <h2 class="logo-name">SHREE</h2>
-                    <p class="logo-tagline">Smart Hostel Record</p>
-                </div>
-            </div>
+           <div class="logo-section">
+        <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
+        <div>
+            <h2 class="logo-name">SHREE</h2>
+           <p style="font-size: 10px; color: #94a3b8">
+          Smart Hostel Record & Employee Evaluation
+        </p>
+          </div>
+        </div>
             <nav class="nav-menu">
                 <a href="{% url 'warden_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'warden_dashboard' %}active{% endif %}">
                     <i class="fa-solid fa-table-columns nav-icon"></i>

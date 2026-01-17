@@ -6,10 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SHREE - Attendance Management</title>
 
-    <link
-      rel="stylesheet"
-      href="{% static 'Shree1/css/dashboardAdmin.css' %}"
-    />
+    
     <link
       rel="stylesheet"
       href="{% static 'Shree1/css/admin_attendance.css' %}"
@@ -45,18 +42,13 @@
           <a href="{% url 'admin_inventory' %}" class="nav-item">
             <i class="fa-solid fa-box-open"></i> Inventory
           </a>
-          <a href="{% url 'admin_employee_evaluation' %}" class="nav-item">
-            <i class="fa-regular fa-star"></i> Employee Evaluation
-          </a>
           <a href="{% url 'admin_leave_Management' %}" class="nav-item">
             <i class="fa-solid fa-file-contract"></i> Leave Management
           </a>
           <a href="{% url 'admin_salary' %}" class="nav-item">
             <i class="fa-solid fa-indian-rupee-sign"></i> Salary
           </a>
-          <a href="{% url 'admin_reports' %}" class="nav-item">
-            <i class="fa-solid fa-chart-column"></i> Reports
-          </a>
+          
           <a href="{% url 'admin_profile' %}" class="nav-item">
             <i class="fa-regular fa-user"></i> Profile
           </a>

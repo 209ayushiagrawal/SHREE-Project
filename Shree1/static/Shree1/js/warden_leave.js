@@ -8,6 +8,21 @@ window.toggleModal = function(show) {
     }
 };
 
+// NEW: Warden vs Worker selection logic handle karne ke liye
+window.toggleEmployeeSelect = function() {
+    const actionSelect = document.getElementById('actionSelect');
+    const employeeGroup = document.getElementById('employeeSelectGroup');
+    const workerSelect = document.getElementById('worker_id_select');
+
+    if (actionSelect.value === 'self') {
+        employeeGroup.style.display = 'none'; // Warden ke liye dropdown hide karein
+        workerSelect.required = false;       // Validation hata dein
+    } else {
+        employeeGroup.style.display = 'block'; // Worker ke liye dropdown show karein
+        workerSelect.required = true;
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('leaveModal');
 

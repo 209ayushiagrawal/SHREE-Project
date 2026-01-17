@@ -1,3 +1,4 @@
+#views.py
 # Shree1/views.py
 from django.shortcuts import render,redirect
 
@@ -10,10 +11,6 @@ def login_selection(request):
 
 def role_selection(request):
     return render(request, 'Shree1/signup_role.html')
-
-def supplier_profile(request):
-    return render(request, 'Shree1/profileSupplier.html')
-
 
 
 def admin_user_management(request):
@@ -42,45 +39,6 @@ def admin_profile(request):
     }
     return render(request, 'Shree1/admin_profile.html')
 
-def admin_employee_evaluation(request):
-    # Sample data matching your screenshot
-    employees = [
-        {'name': 'Rajesh Kumar', 'role': 'Kitchen Staff'},
-        {'name': 'Priya Sharma', 'role': 'Cleaning Staff'},
-    ]
-    return render(request, 'Shree1/admin_employee_evaluation.html', {'employees': employees})
-
-def admin_reports(request):
-    # Hardcoded data to match your screenshot exactly
-    static_reports = [
-        {
-            'title': 'Attendance Report',
-            'date_range': 'December 2025',
-            'record_count': '1250',
-            'generated_at': '2026-01-01'
-        },
-        {
-            'title': 'Inventory Report',
-            'date_range': 'December 2025',
-            'record_count': '85',
-            'generated_at': '2026-01-01'
-        },
-        {
-            'title': 'Salary Report',
-            'date_range': 'December 2025',
-            'record_count': '45',
-            'generated_at': '2026-01-01'
-        }
-    ]
-    
-    context = {
-        'reports': static_reports,
-        'segment': 'reports',
-        'username': 'slzmdl',  # Matching your screenshot
-        'role': 'Admin'
-    }
-    
-    return render(request, 'Shree1/admin_reports.html')
 
 
 def admin_salary(request):
@@ -107,3 +65,19 @@ def admin_salary(request):
         'role': 'Admin'
     }
     return render(request, 'Shree1/admin_salary.html', context)
+
+def supplier_profile(request):
+    # Context data for the Supplier
+    context = {
+        'username': 'zxms',
+        'role': 'Supplier',
+        'email': 'zxms@gmail.com',
+        'phone': '+91 98765 43210',
+        'employee_id': 'EMP001',
+        # Department removed from context
+        'joining_date': '15-01-2024',
+        'address': '123 Main Street, City, State'
+    }
+    return render(request, 'Shree1/supplier_profile.html', context)
+
+# Shree1/views.py

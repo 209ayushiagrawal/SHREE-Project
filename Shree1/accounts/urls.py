@@ -38,6 +38,8 @@ urlpatterns = [
 
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
+    path('forget-password/', views.forget_password, name='forget_password'),
+
 
     
 ]

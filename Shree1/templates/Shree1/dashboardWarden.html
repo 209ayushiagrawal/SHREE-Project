@@ -15,61 +15,42 @@
                 <div class="logo-icon">S</div>
                 <div>
                     <h2 class="logo-name">SHREE</h2>
-                    <p class="logo-tagline">Smart Hostel Record & Employee Evaluation</p>
+                    <p class="logo-tagline">Smart Hostel System</p>
                 </div>
             </div>
             <nav class="nav-menu">
                 <a href="#" class="nav-item active"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
-                <a href="{% url 'attendance' %}" class="nav-item">
-                 <i class="fa-regular fa-calendar-check"></i> Attendance
-                </a>
-
-                <a href="{% url 'inventory' %}" class="nav-item">
-                <i class="fa-solid fa-boxes-stacked"></i> Inventory
-                </a>
-                
-                <a href="{% url 'warden_leave' %}" class="nav-item">
-                <i class="fa-regular fa-file-lines"></i> Leave Management
-                </a>
-                <a href="{% url 'warden_profile' %}" class="nav-item">
-                <i class="fa-regular fa-user"></i> Profile
-                </a>
+                <a href="{% url 'attendance' %}" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Attendance</a>
+                <a href="{% url 'inventory' %}" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+                <a href="{% url 'warden_leave' %}" class="nav-item"><i class="fa-regular fa-file-lines"></i> Leave Management</a>
+                <a href="{% url 'warden_profile' %}" class="nav-item"><i class="fa-regular fa-user"></i> Profile</a>
             </nav>
         </aside>
 
         <main class="main-content">
             <header class="top-header">
                 <div class="user-info">
-                     <span class="user-name">{{ warden.name }}</span>
+                    <span class="user-name">{{ warden.name|default:"Anita Warden" }}</span>
                     <span class="user-role">Warden</span>
                 </div>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                <form action="{% url 'logout' %}" method="POST" style="margin-left: 20px;">
                     {% csrf_token %}
-                    <button type="submit" class="logout-btn">
-                        <i class="fa-solid fa-right-from-bracket"></i> Logout
-                    </button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </header>
 
             <section class="dashboard-intro">
                 <h1>Warden Dashboard</h1>
-                <p>Welcome, {{ warden.name }}! Managing {{ worker_count }} workers today.</p>
+                <p>Welcome back! Overview of your hostel status.</p>
             </section>
 
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-info">
-                        <p>Total Managed Workers</p>
-                        <h3>{{ worker_count }}</h3>
+                        <p>Managed Workers</p>
+                        <h3>{{ worker_count|default:"1" }}</h3>
                     </div>
-                <div class="stat-icon blue-bg"><i class="fa-regular fa-calendar"></i></div>
-            </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <p>Pending Leave Requests</p>
-                        <h3>3</h3>
-                    </div>
-                    <div class="stat-icon orange-bg"><i class="fa-regular fa-clock"></i></div>
+                    <div class="stat-icon blue-bg"><i class="fa-solid fa-users"></i></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-info">
@@ -78,57 +59,10 @@
                     </div>
                     <div class="stat-icon red-bg"><i class="fa-solid fa-box-open"></i></div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <p>Tasks Completed</p>
-                        <h3>12</h3>
-                    </div>
-                    <div class="stat-icon green-bg"><i class="fa-regular fa-circle-check"></i></div>
-                </div>
             </div>
 
-            <div class="action-buttons">
-                <a href="{% url 'attendance' %}" class="btn btn-primary" style="text-decoration: none; text-align: center;">
-                    Mark Attendance
-                </a>
-
-                <a href="{% url 'inventory' %}" class="btn btn-success" style="text-decoration: none; text-align: center;">
-                    Update Inventory
-                </a>
-
-                <a href="#" class="btn btn-outline" style="text-decoration: none; text-align: center;">
-                    View Reports
-                </a>
-            </div>
-
-            <div class="details-grid">
-                <div class="card-panel">
-                    <h3>Pending Leave Requests</h3>
-                    <div class="leave-item">
-                        <div class="leave-info">
-                            <strong>Rajesh Kumar</strong>
-                            <span>Sick Leave • 2 days</span>
-                            <small>Jan 15-16</small>
-                        </div>
-                        <div class="leave-actions">
-                            <button class="btn-approve">Approve</button>
-                            <button class="btn-reject">Reject</button>
-                        </div>
-                    </div>
-                    <div class="leave-item">
-                        <div class="leave-info">
-                            <strong>Priya Sharma</strong>
-                            <span>Casual Leave • 1 day</span>
-                            <small>Jan 18</small>
-                        </div>
-                        <div class="leave-actions">
-                            <button class="btn-approve">Approve</button>
-                            <button class="btn-reject">Reject</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-panel">
+            <div class="main-layout-grid">
+                <div class="card-panel-left">
                     <h3>Low Stock Alert</h3>
                     <table class="stock-table">
                         <thead>
@@ -139,27 +73,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Rice</td>
-                                <td class="text-danger">50</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <td>Cooking Oil</td>
-                                <td class="text-danger">15</td>
-                                <td>30</td>
-                            </tr>
-                            <tr>
-                                <td>Cleaning Supplies</td>
-                                <td class="text-danger">5</td>
-                                <td>20</td>
-                            </tr>
+                            <tr><td>Rice</td><td class="text-danger">50</td><td>100</td></tr>
+                            <tr><td>Cooking Oil</td><td class="text-danger">15</td><td>30</td></tr>
+                            <tr><td>Cleaning Supplies</td><td class="text-danger">5</td><td>20</td></tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="side-column-right">
+                    <div class="btn-stack">
+                        <a href="{% url 'attendance' %}" class="btn btn-primary">Mark Attendance</a>
+                        <a href="{% url 'inventory' %}" class="btn btn-success">Update Inventory</a>
+                    </div>
+
+                    <div class="card-panel-small">
+                        <h3>Important Contacts</h3>
+                        <div class="contact-box">
+                            <strong>Admin Office</strong>
+                            <span>+91 98765 43210</span>
+                        </div>
+                        <div class="contact-box">
+                            <strong>Chief Warden</strong>
+                            <span>+91 98765 00000</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
-    <script src="{% static 'Shree1/js/dashboardWarden.js' %}"></script>
 </body>
 </html>
