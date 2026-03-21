@@ -35,11 +35,13 @@ urlpatterns = [
 
     
     path('warden/inventory/update/', views.update_inventory_stock, name='update_inventory_stock'),
+    
+    # ---------- ADMIN DATA ACTIONS ----------
+    path('add-uni-id/', views.add_university_id, name='add_university_id'),
+    path('delete-uni-id/<int:pk>/', views.delete_uni_id, name='delete_uni_id'),
+    path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
 
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
     path('forget-password/', views.forget_password, name='forget_password'),
 
-
-    
 ]

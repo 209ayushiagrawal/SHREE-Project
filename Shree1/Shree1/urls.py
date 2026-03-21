@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     
-    
+    path('Shree-admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('Shree-admin/users/', views.admin_user_management, name='admin_user_management'),
 
     path('Shree-admin/attendance/', views.admin_attendance, name='admin_attendance'),
@@ -35,7 +35,6 @@ urlpatterns = [
    
    path('Shree-admin/profile/', views.admin_profile, name='admin_profile'),
     
-    path('Shree-admin/salary/', views.admin_salary, name='admin_salary'),
 ]
 
    

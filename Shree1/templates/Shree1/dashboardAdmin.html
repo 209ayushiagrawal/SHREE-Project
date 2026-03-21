@@ -1,147 +1,152 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SHREE - Admin Dashboard</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
-    <style>
-      /* Layout & General Styling */
-      * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Inter", sans-serif; }
-      body { background-color: #f1f5f9; overflow-x: hidden; }
-
-      /* Top Header */
-      .top-header { 
-        height: 70px; background: white; display: flex; 
-        justify-content: space-between; align-items: center; 
-        padding: 0 24px; border-bottom: 1px solid #e2e8f0; 
-        position: fixed; width: 100%; top: 0; z-index: 100;
-      }
-
-      .container { display: flex; margin-top: 70px; min-height: calc(100vh - 70px); }
-
-      /* Sidebar */
-      .sidebar { 
-        width: 260px; background: white; border-right: 1px solid #e2e8f0; 
-        padding: 24px; position: fixed; height: calc(100vh - 70px); overflow-y: auto;
-      }
-
-      .nav-menu { display: flex; flex-direction: column; gap: 8px; }
-      .nav-item { 
-        display: flex; align-items: center; gap: 12px; padding: 12px 16px; 
-        text-decoration: none; color: #64748b; border-radius: 8px; font-weight: 500; 
-      }
-      .nav-item.active, .nav-item:hover { background: #eff6ff; color: #2563eb; }
-
-      /* Main Content Area */
-      .main-content { 
-        flex: 1; margin-left: 260px; padding: 32px; background: #f1f5f9; 
-      }
-
-      /* Stats Cards */
-      .stats-grid { 
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-        gap: 24px; margin-bottom: 32px; 
-      }
-      .stat-card { 
-        background: white; padding: 24px; border-radius: 16px; 
-        border: 1px solid #e2e8f0; display: flex; 
-        justify-content: space-between; align-items: center;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      }
-      .stat-info h3 { font-size: 28px; margin-top: 5px; }
-      .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-      
-      .blue-bg { background: #dbeafe; color: #2563eb; }
-      .green-bg { background: #dcfce7; color: #16a34a; }
-      .orange-bg { background: #ffedd5; color: #f97316; }
-
-      /* Tables & Panels */
-      .details-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 24px; }
-      .card-panel { background: white; padding: 24px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-      .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-      .admin-table th { text-align: left; padding: 12px; border-bottom: 2px solid #f1f5f9; color: #64748b; font-size: 13px; }
-      .admin-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-      
-      .text-warning { color: #f59e0b; font-weight: 600; }
-      .text-danger { color: #ef4444; font-weight: 600; }
-
-      .activity-list { list-style: none; margin-top: 15px; }
-      .activity-list li { padding: 12px 0; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-      .dot { width: 8px; height: 8px; border-radius: 50%; }
-      .dot.blue { background: #2563eb; }
-      .dot.green { background: #16a34a; }
-      .dot.orange { background: #f97316; }
-    </style>
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/dashboardAdmin.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
-
-    <header class="top-header">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="Logo" style="width: 40px; height: 40px; border-radius: 8px;">
-        <h2 style="font-size: 20px; color: #1e293b;">SHREE</h2>
-      </div>
-      
-      <div style="display: flex; align-items: center; gap: 20px;">
-        <div style="text-align: right;">
-          <span class="user-name" style="font-weight: 700; display: block;">{{ admin_name|capfirst|default:"Admin" }}</span>
-          <span class="user-role" style="font-size: 12px; color: #64748b;">Hostel Admin</span>
-        </div>
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit" style="background: #fee2e2; color: #ef4444; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">
-            Logout
-          </button>
-        </form>
-      </div>
-    </header>
-
     <div class="container">
       <aside class="sidebar">
+        <div class="logo-section">
+          <img
+            src="{% static 'Shree1/images/logo_img.jpeg' %}"
+            alt="SHREE Logo"
+            class="nav-logo-file"
+            style="
+              width: 50px;
+              height: 50px;
+              border-radius: 8px;
+              object-fit: contain;
+            "
+          />
+          <div>
+            <h2 class="logo-name">SHREE</h2>
+            <p style="font-size: 10px; color: #94a3b8">
+              Smart Hostel Record & Employee Evaluation
+            </p>
+          </div>
+        </div>
+
         <nav class="nav-menu">
-          <a href="{% url 'admin_dashboard' %}" class="nav-item active"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
-          <a href="{% url 'admin_user_management' %}" class="nav-item"><i class="fa-solid fa-user-group"></i> User Management</a>
-          <a href="{% url 'admin_attendance' %}" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Attendance</a>
-          <a href="{% url 'admin_inventory' %}" class="nav-item"><i class="fa-solid fa-box-open"></i> Inventory</a>
-          <a href="{% url 'admin_leave_Management' %}" class="nav-item"><i class="fa-solid fa-file-contract"></i> Leave Management</a>
-          <a href="{% url 'admin_salary' %}" class="nav-item"><i class="fa-solid fa-indian-rupee-sign"></i> Salary</a>
-          <a href="{% url 'admin_profile' %}" class="nav-item"><i class="fa-regular fa-user"></i> Profile</a>
+          <a href="{% url 'admin_dashboard' %}" class="nav-item active">
+            <i class="fa-solid fa-table-cells-large"></i> Dashboard
+          </a>
+
+          <a href="{% url 'admin_user_management' %}" class="nav-item">
+            <i class="fa-solid fa-user-group"></i> User Management
+          </a>
+
+          <a href="{% url 'admin_attendance' %}" class="nav-item">
+            <i class="fa-regular fa-calendar-check"></i> Attendance
+          </a>
+
+          <a href="{% url 'admin_inventory' %}" class="nav-item">
+            <i class="fa-solid fa-box-open"></i> Inventory
+          </a>
+
+          <a href="{% url 'admin_leave_Management' %}" class="nav-item">
+            <i class="fa-solid fa-file-contract"></i> Leave Management
+          </a>
+
+          <a href="{% url 'admin_profile' %}" class="nav-item">
+            <i class="fa-regular fa-user"></i> Profile
+          </a>
         </nav>
       </aside>
 
       <main class="main-content">
-        <section class="dashboard-intro" style="margin-bottom: 25px;">
+        <header class="top-header">
+          <div class="user-info">
+            <span class="user-name">{{ admin_name|capfirst }}</span>
+            <span class="user-role">Admin</span>
+          </div>
+          <form
+            action="{% url 'logout' %}"
+            method="post"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+          </form>
+        </header>
+
+        <section class="dashboard-intro">
           <h1>Admin Dashboard</h1>
-          <p style="color: #64748b;">Overview of system statistics and activities.</p>
+          <p>
+            Welcome back, {{ admin_name|capfirst }}! Here's your system
+            overview.
+          </p>
         </section>
 
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-info"><p>Total Wardens</p><h3>{{ warden_count|default:"0" }}</h3></div>
-            <div class="stat-icon blue-bg"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="stat-info">
+              <p>Total Wardens</p>
+              <h3>{{ warden_count }}</h3>
+            </div>
+            <div class="stat-icon blue-bg">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
           </div>
           <div class="stat-card">
-            <div class="stat-info"><p>Total Workers</p><h3>{{ worker_count|default:"0" }}</h3></div>
-            <div class="stat-icon green-bg"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-info">
+              <p>Total Workers</p>
+              <h3>{{ worker_count }}</h3>
+            </div>
+            <div class="stat-icon green-bg">
+              <i class="fa-solid fa-users"></i>
+            </div>
           </div>
           <div class="stat-card">
-            <div class="stat-info"><p>Total Suppliers</p><h3>{{ supplier_count|default:"0" }}</h3></div>
-            <div class="stat-icon orange-bg"><i class="fa-solid fa-truck-field"></i></div>
+            <div class="stat-info">
+              <p>Total Suppliers</p>
+              <h3>{{ supplier_count }}</h3>
+            </div>
+            <div class="stat-icon orange-bg">
+              <i class="fa-solid fa-truck-field"></i>
+            </div>
           </div>
         </div>
 
         <div class="details-grid">
           <div class="card-panel">
-            <h3><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> Inventory Alerts</h3>
+            <h3>Inventory Alerts</h3>
             <table class="admin-table">
-              <thead><tr><th>Item</th><th>Current</th><th>Required</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Current</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td>Rice (kg)</td><td class="text-warning">50</td><td>100</td></tr>
-                <tr><td>Cooking Oil (L)</td><td class="text-danger">15</td><td>30</td></tr>
-                <tr><td>Cleaning Supplies</td><td class="text-danger">5</td><td>20</td></tr>
+                <tr>
+                  <td>Rice (kg)</td>
+                  <td class="text-warning">50</td>
+                  <td>100</td>
+                </tr>
+                <tr>
+                  <td>Cooking Oil (L)</td>
+                  <td class="text-danger">15</td>
+                  <td>30</td>
+                </tr>
+                <tr>
+                  <td>Cleaning Supplies</td>
+                  <td class="text-danger">5</td>
+                  <td>20</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -149,9 +154,18 @@
           <div class="card-panel">
             <h3>Recent Activities</h3>
             <ul class="activity-list">
-              <li><span class="dot blue"></span> New worker registered <small style="margin-left: auto; color: #94a3b8;">10m ago</small></li>
-              <li><span class="dot green"></span> Leave approved by Warden <small style="margin-left: auto; color: #94a3b8;">25m ago</small></li>
-              <li><span class="dot orange"></span> Low stock alert: Oil <small style="margin-left: auto; color: #94a3b8;">1h ago</small></li>
+              <li>
+                <span class="dot blue"></span> New worker registered
+                <small>10 mins ago</small>
+              </li>
+              <li>
+                <span class="dot green"></span> Leave approved by Warden
+                <small>25 mins ago</small>
+              </li>
+              <li>
+                <span class="dot orange"></span> Low stock alert: Oil
+                <small>1 hour ago</small>
+              </li>
             </ul>
           </div>
         </div>

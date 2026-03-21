@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
 from .models import User, UniversityID, Worker, Warden, Supplier, Attendance, Inventory, LeaveRequest
 from django.contrib.auth import authenticate, login
@@ -206,6 +206,36 @@ def supplier_signup_view(request):
         return redirect('supplier_dashboard')
 
     return render(request, 'Shree1/signupSupplier.html')
+
+
+# -------------------------------
+# 5. ADMIN ACTIONS (MANAGEMENT)
+# -------------------------------
+
+@login_required
+def add_university_id(request):
+    if request.method == "POST":
+        full_name = request.POST.get('full_name')
+        uni_id = request.POST.get('uni_id')
+        role = request.POST.get('role')
+        UniversityID.objects.create(university_id=uni_id, full_name=full_name, role=role)
+        messages.success(request, f"ID {uni_id} authorized.")
+    return redirect('admin_user_management')
+
+@login_required
+def delete_uni_id(request, pk):
+    record = get_object_or_404(UniversityID, id=pk)
+    record.delete()
+    messages.success(request, "Record removed.")
+    return redirect('admin_user_management')
+
+@login_required
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    UniversityID.objects.filter(university_id=user.university_id).update(is_used=False)
+    user.delete()
+    messages.success(request, "User deleted.")
+    return redirect('admin_user_management')
 
 # -------------------------------
 # 4. DASHBOARDS & FEATURES
@@ -741,6 +771,3 @@ def approve_leave_logic(request, leave_request_id):
 
 def forget_password(request):
     return render(request, 'Shree1/forget_password.html')
-
-
-

@@ -1,36 +1,59 @@
-// Function to handle toggle logic
-function toggleStatus(button, status) {
-    // 1. Get the parent container (.btn-group)
-    const parent = button.parentElement;
+document.addEventListener("DOMContentLoaded", function () {
+  const attendanceDate = document.getElementById("attendanceDate");
+  const radioButtons = document.querySelectorAll('input[type="radio"]');
+  const presentDisplay = document.getElementById("present-count");
+  const absentDisplay = document.getElementById("absent-count");
+  const rateDisplay = document.getElementById("attendance-rate");
 
-    // 2. Remove 'active' class from all buttons in this specific group
-    const buttons = parent.querySelectorAll('.status-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
+  // --- 1. Date Constraint Logic ---
+  // Enforce max date again via JS in case of browser inconsistencies
+  const today = new Date().toISOString().split("T")[0];
+  attendanceDate.setAttribute("max", today);
 
-    // 3. Add 'active' class to the clicked button
-    button.classList.add('active');
+  attendanceDate.addEventListener("change", function () {
+    if (this.value > today) {
+      alert("Future dates are not allowed!");
+      this.value = today;
+    } else {
+      // Optional: Auto-submit form to fetch data for the selected previous date
+      // this.closest('form').submit();
+      // Since the date is outside the main form, you might need a separate redirect logic:
+      // window.location.href = `?date=${this.value}`;
+    }
+  });
 
-    // 4. Trigger Recalculation
-    calculateSummary();
-}
+  // --- 2. Dynamic Summary Logic ---
+  function updateSummary() {
+    let present = 0;
+    let absent = 0;
 
-// Function to calculate summary totals
-function calculateSummary() {
-    // Count Present buttons that have the 'active' class
-    const presentCount = document.querySelectorAll('.status-btn.present.active').length;
-    
-    // Count Absent buttons that have the 'active' class
-    const absentCount = document.querySelectorAll('.status-btn.absent.active').length;
+    // Count current status based on checked radio inputs
+    const checkedButtons = document.querySelectorAll(
+      'input[type="radio"]:checked',
+    );
 
-    // Calculate Rate
-    const total = presentCount + absentCount;
-    const rate = total === 0 ? 0 : Math.round((presentCount / total) * 100);
+    checkedButtons.forEach((radio) => {
+      if (radio.value === "Present") {
+        present++;
+      } else if (radio.value === "Absent") {
+        absent++;
+      }
+    });
 
-    // Update the DOM
-    document.getElementById('countPresent').innerText = presentCount;
-    document.getElementById('countAbsent').innerText = absentCount;
-    document.getElementById('attendanceRate').innerText = rate + "%";
-}
+    const total = present + absent;
+    const rate = total > 0 ? Math.round((present / total) * 100) : 0;
 
-// Initialize summary on page load
-document.addEventListener('DOMContentLoaded', calculateSummary);
+    // Update DOM
+    presentDisplay.textContent = present;
+    absentDisplay.textContent = absent;
+    rateDisplay.textContent = rate + "%";
+  }
+
+  // Attach listener to all radio buttons
+  radioButtons.forEach((radio) => {
+    radio.addEventListener("change", updateSummary);
+  });
+
+  // Initial calculation on page load
+  updateSummary();
+});

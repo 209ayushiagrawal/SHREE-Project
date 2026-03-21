@@ -1,12 +1,18 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SHREE - Attendance Management</title>
-
-    
+    <title>Attendance - SHREE</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'Shree1/css/dashboardAdmin.css' %}"
+    />
     <link
       rel="stylesheet"
       href="{% static 'Shree1/css/admin_attendance.css' %}"
@@ -17,185 +23,168 @@
     />
   </head>
   <body>
-    <div class="container">
+    <div class="page-container">
       <aside class="sidebar">
-        <div class="logo-section">
-        <img src="{% static 'Shree1/images/logo_img.jpeg' %}" alt="SHREE Logo" class="nav-logo-file" style="width: 50px; height: 50px; border-radius: 8px; object-fit: contain;">
-        <div>
-            <h2 class="logo-name">SHREE</h2>
-           <p style="font-size: 10px; color: #94a3b8">
-          Smart Hostel Record & Employee Evaluation
-        </p>
+        <div class="logo-area">
+          <img
+            src="{% static 'Shree1/images/logo_img.jpeg' %}"
+            alt="Logo"
+            class="sidebar-logo"
+          />
+          <div class="logo-text">
+            <h2 class="brand-name">SHREE</h2>
+            <p class="brand-sub">Smart Hostel Record & Evaluation</p>
           </div>
         </div>
-
-        <nav class="nav-menu">
-          <a href="{% url 'admin_dashboard' %}" class="nav-item">
-            <i class="fa-solid fa-table-cells-large"></i> Dashboard
-          </a>
-          <a href="{% url 'admin_user_management' %}" class="nav-item">
-            <i class="fa-solid fa-users"></i> User Management
-          </a>
-          <a href="#" class="nav-item active">
-            <i class="fa-regular fa-calendar-check"></i> Attendance
-          </a>
-          <a href="{% url 'admin_inventory' %}" class="nav-item">
-            <i class="fa-solid fa-box-open"></i> Inventory
-          </a>
-          <a href="{% url 'admin_leave_Management' %}" class="nav-item">
-            <i class="fa-solid fa-file-contract"></i> Leave Management
-          </a>
-          <a href="{% url 'admin_salary' %}" class="nav-item">
-            <i class="fa-solid fa-indian-rupee-sign"></i> Salary
-          </a>
-          
-          <a href="{% url 'admin_profile' %}" class="nav-item">
-            <i class="fa-regular fa-user"></i> Profile
-          </a>
+        <nav class="side-nav">
+          <a href="{% url 'admin_dashboard' %}" class="nav-link"
+            ><i class="fa-solid fa-table-cells-large"></i> Dashboard</a
+          >
+          <a href="{% url 'admin_user_management' %}" class="nav-link"
+            ><i class="fa-solid fa-users"></i> User Management</a
+          >
+          <a href="{% url 'admin_attendance' %}" class="nav-link active"
+            ><i class="fa-regular fa-calendar-check"></i> Attendance</a
+          >
+          <a href="{% url 'admin_inventory' %}" class="nav-link"
+            ><i class="fa-solid fa-box-open"></i> Inventory</a
+          >
+          <a href="{% url 'admin_leave_Management' %}" class="nav-link"
+            ><i class="fa-solid fa-file-contract"></i> Leave Management</a
+          >
+          <a href="{% url 'admin_profile' %}" class="nav-link"
+            ><i class="fa-regular fa-user"></i> Profile</a
+          >
         </nav>
       </aside>
 
-      <main class="main-content">
-        <header class="top-header">
-          <div class="user-info">
-            <span class="user-name">aa</span>
-            <span class="user-role">Admin</span>
-          </div>
-          <a href="{% url 'logout' %}" class="logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i> Logout
-          </a>
-        </header>
-
-        <div class="page-header-row">
-          <section class="dashboard-intro">
+      <main class="main-body">
+        <header class="main-header">
+          <div class="header-left">
             <h1>Attendance Management</h1>
             <p>Mark and manage employee attendance</p>
-          </section>
-          <button class="save-btn" id="saveBtn">
-            <i class="fa-regular fa-floppy-disk"></i> Save Attendance
-          </button>
-        </div>
-
-        <div class="content-card">
-          <div class="date-section">
-            <div class="date-wrapper">
-              <i class="fa-regular fa-calendar"></i>
-              <input type="date" value="2026-01-14" class="date-input" />
+          </div>
+          <div class="header-right">
+            <div class="admin-info">
+              <span>aa</span>
+              <p>Admin</p>
             </div>
-            <span class="date-label">Select Date</span>
+            <button type="submit" form="attendanceForm" class="save-btn">
+              <i class="fa-solid fa-floppy-disk"></i> Save Attendance
+            </button>
+          </div>
+        </header>
+
+        <div class="white-card">
+          <div class="date-selector-row">
+            <div class="date-box">
+              <i class="fa-regular fa-calendar"></i>
+              <input
+                type="date"
+                id="attendanceDate"
+                name="attendance_date"
+                value="{{ current_date_str }}"
+                max="{{ today_str }}"
+                onchange="fetchAttendanceForDate(this.value)"
+              />
+            </div>
+            <span class="label-text">Select Date to view records</span>
           </div>
 
-          <table class="attendance-table">
-            <thead>
-              <tr>
-                <th>Employee Name</th>
-                <th>Role</th>
-                <th>Department</th>
-                <th>Attendance</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Rajesh Kumar</td>
-                <td>Kitchen Staff</td>
-                <td>Kitchen</td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      class="status-btn present active"
-                      onclick="toggleStatus(this, 'present')"
-                    >
-                      Present
-                    </button>
-                    <button
-                      class="status-btn absent"
-                      onclick="toggleStatus(this, 'absent')"
-                    >
-                      Absent
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Priya Sharma</td>
-                <td>Cleaning Staff</td>
-                <td>Cleaning</td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      class="status-btn present active"
-                      onclick="toggleStatus(this, 'present')"
-                    >
-                      Present
-                    </button>
-                    <button
-                      class="status-btn absent"
-                      onclick="toggleStatus(this, 'absent')"
-                    >
-                      Absent
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Amit Patel</td>
-                <td>Security Guard</td>
-                <td>Security</td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      class="status-btn present"
-                      onclick="toggleStatus(this, 'present')"
-                    >
-                      Present
-                    </button>
-                    <button
-                      class="status-btn absent active"
-                      onclick="toggleStatus(this, 'absent')"
-                    >
-                      Absent
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Sunita Devi</td>
-                <td>Cleaning Staff</td>
-                <td>Cleaning</td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      class="status-btn present active"
-                      onclick="toggleStatus(this, 'present')"
-                    >
-                      Present
-                    </button>
-                    <button
-                      class="status-btn absent"
-                      onclick="toggleStatus(this, 'absent')"
-                    >
-                      Absent
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <form method="POST" id="attendanceForm">
+            {% csrf_token %}
+            <input
+              type="hidden"
+              name="save_date"
+              id="hiddenSaveDate"
+              value="{{ current_date_str }}"
+            />
 
-          <div class="summary-footer">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Worker Master</th>
+                  <th>Warden</th>
+                  <th>Attendance Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for worker in workers %}
+                <tr>
+                  <td class="name-cell">
+                    {{ worker.worker_id }} - {{ worker.name }}
+                  </td>
+                  <td class="muted-cell">
+                    {{ worker.warden_name }} ({{ worker.warden_id }})
+                  </td>
+                  <td>
+                    <div class="toggle-group">
+                      <input
+                        type="radio"
+                        name="status_{{ worker.worker_id }}"
+                        value="Present"
+                        id="p_{{ worker.worker_id }}"
+                        {%
+                        if
+                        worker.status|lower=""
+                        ="present"
+                        %}checked="checked"
+                        {%
+                        endif
+                        %}
+                      />
+                      <label for="p_{{ worker.worker_id }}" class="lbl-present"
+                        >Present</label
+                      >
+
+                      <input
+                        type="radio"
+                        name="status_{{ worker.worker_id }}"
+                        value="Absent"
+                        id="a_{{ worker.worker_id }}"
+                        {%
+                        if
+                        worker.status|lower=""
+                        ="absent"
+                        %}checked="checked"
+                        {%
+                        endif
+                        %}
+                      />
+                      <label for="a_{{ worker.worker_id }}" class="lbl-absent"
+                        >Absent</label
+                      >
+                    </div>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td
+                    colspan="3"
+                    style="text-align: center; padding: 20px; color: #64748b"
+                  >
+                    No records found for this date.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </form>
+
+          <div class="summary-section">
             <h3>Attendance Summary</h3>
-            <div class="summary-cards">
-              <div class="sum-card card-green">
+            <div class="summary-grid">
+              <div class="sum-card green-sum">
                 <span>Present</span>
-                <h2 id="countPresent">3</h2>
+                <h2 id="present-count">{{ present_count }}</h2>
               </div>
-              <div class="sum-card card-red">
+              <div class="sum-card red-sum">
                 <span>Absent</span>
-                <h2 id="countAbsent">1</h2>
+                <h2 id="absent-count">{{ absent_count }}</h2>
               </div>
-              <div class="sum-card card-blue">
+              <div class="sum-card blue-sum">
                 <span>Attendance Rate</span>
-                <h2 id="attendanceRate">75%</h2>
+                <h2 id="attendance-rate">0%</h2>
               </div>
             </div>
           </div>
@@ -204,5 +193,15 @@
     </div>
 
     <script src="{% static 'Shree1/js/admin_attendance.js' %}"></script>
+    <script>
+      function fetchAttendanceForDate(selectedDate) {
+        window.location.href = "?date=" + selectedDate;
+      }
+      document
+        .getElementById("attendanceDate")
+        .addEventListener("change", function () {
+          document.getElementById("hiddenSaveDate").value = this.value;
+        });
+    </script>
   </body>
 </html>

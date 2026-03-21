@@ -1,285 +1,296 @@
-/* ================== GLOBAL VARIABLES & RESET ================== */
-:root {
-    --primary-blue: #2563eb;
-    --bg-light: #f8fafc;
-    --text-dark: #1e293b;
-    --text-gray: #64748b;
-    --danger-red: #ef4444;
-    --success-green: #10b981;
+/* General Reset */
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc; /* Very light blue/gray tint */
+  color: #334155;
 }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Segoe UI', sans-serif; 
+.page-container {
+  display: flex;
+  min-height: 100vh;
 }
 
-body { 
-    background-color: var(--bg-light); 
-    color: var(--text-dark); 
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: white;
+  padding: 25px;
+  position: fixed;
+  height: 100vh;
+  border-right: 1px solid #e2e8f0;
 }
 
-.container { 
-    display: flex; 
-    min-height: 100vh; 
+.sidebar-logo {
+  width: 40px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.brand-name {
+  margin: 0;
+  font-size: 20px;
+  color: #1e293b;
+  font-weight: 700;
+}
+.brand-sub {
+  margin: 0;
+  font-size: 10px;
+  color: #94a3b8;
+  line-height: 1.2;
 }
 
-/* ================== SIDEBAR (Standardized) ================== */
-.sidebar { 
-    width: 260px; 
-    background: white; 
-    border-right: 1px solid #e2e8f0; 
-    padding: 20px; 
+.side-nav {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #64748b;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.nav-link.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
 }
 
-.logo-section { 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-    margin-bottom: 40px; 
+/* Main Content */
+.main-body {
+  flex: 1;
+  margin-left: 250px;
+  padding: 40px 60px;
 }
 
-/* Corrected Logo Style */
-.nav-logo-file {
-    width: 45px;
-    height: 45px;
-    border-radius: 8px;
-    object-fit: cover;
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+.main-header h1 {
+  font-size: 32px;
+  margin: 0;
+  color: #0f172a;
+  font-weight: 800;
+}
+.main-header p {
+  margin: 5px 0 0 0;
+  color: #64748b;
 }
 
-.logo-name { font-size: 1.5rem; color: #334155; }
-.logo-tagline { font-size: 0.75rem; color: #94a3b8; }
-
-.nav-menu { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-    padding: 0 5px;
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.admin-info {
+  text-align: right;
+}
+.admin-info span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  display: block;
+}
+.admin-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
 }
 
-.nav-item { 
-    text-decoration: none; 
-    color: #64748b; 
-    padding: 12px 15px; 
-    border-radius: 8px; 
-    display: flex; 
-    align-items: center; 
-    transition: all 0.2s;
-    font-size: 15px;
-    font-weight: 500;
-}
-
-.nav-icon { width: 24px; margin-right: 12px; font-size: 1.1rem; text-align: center; }
-
-/* Hover & Active States */
-.nav-item:hover:not(.active) { background: #f1f5f9; color: #334155; }
-
-.nav-item.active { 
-    background: #eff6ff; 
-    color: var(--primary-blue); 
-    font-weight: 600; 
-}
-.nav-item.active .nav-icon { color: var(--primary-blue); }
-
-/* ================== MAIN LAYOUT ================== */
-.main-content { flex: 1; padding: 30px; }
-
-.top-header { 
-    display: flex; 
-    justify-content: flex-end; 
-    margin-bottom: 30px; 
-}
-
-.user-info {
-    margin-right: 20px;
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-    justify-content: center;
-}
-
-.user-name { font-weight: 600; color: #334155; }
-.user-role { font-size: 0.85rem; color: #64748b; }
-
-.logout-btn { 
-    background: white; 
-    color: var(--danger-red); 
-    border: 1px solid #fee2e2; 
-    padding: 8px 15px; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    font-weight: 600; 
-    transition: background 0.2s;
-}
-.logout-btn:hover { background: #fef2f2; }
-
-/* ================== ATTENDANCE SPECIFIC STYLES ================== */
-
-/* Page Header & Save Button */
-.page-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
+.logout-btn {
+  border: 1px solid #e2e8f0;
+  background: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
 }
 
 .save-btn {
-    background-color: var(--primary-blue);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.2s;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.save-btn:hover { background-color: #1d4ed8; }
-
-/* Content Card */
-.content-card {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
+/* Inner Card */
+.white-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  border: 1px solid #f1f5f9;
 }
 
-/* Date Section */
-.date-section {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
+.date-selector-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 40px;
 }
 
-.date-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+/* Merged Date Box Styling */
+.date-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 10px 15px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
 }
 
-.date-wrapper i {
-    position: absolute;
-    left: 12px;
-    color: #64748b;
-    z-index: 1;
+.date-box input {
+  border: none;
+  font-weight: 600;
+  color: #1e293b;
+  width: 100px;
+  outline: none;
 }
 
-.date-input {
-    padding: 10px 15px 10px 38px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #334155;
-    outline: none;
-    width: 160px;
-    font-family: 'Segoe UI', sans-serif;
+.label-text {
+  color: #94a3b8;
+  font-size: 14px;
 }
 
-.date-label { color: #64748b; font-size: 14px; }
-
-/* Table Styling */
-.attendance-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 15px; /* Spacing between rows */
+#attendanceDate {
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
 }
 
-.attendance-table th {
-    text-align: left;
-    color: #0f172a;
-    font-weight: 700;
-    font-size: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e2e8f0;
+/* Allows the user to click anywhere in the box to open the calendar */
+#attendanceDate::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
 }
 
-.attendance-table td {
-    padding: 10px 0;
-    color: #334155;
-    font-size: 15px;
-    vertical-align: middle;
+/* Data Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th {
+  text-align: left;
+  padding: 15px 10px;
+  color: #1e293b;
+  border-bottom: 2px solid #f1f5f9;
+  font-size: 14px;
+}
+.data-table td {
+  padding: 25px 10px;
+  border-bottom: 1px solid #f8fafc;
+}
+.name-cell {
+  font-weight: 600;
+  color: #1e293b;
+}
+.muted-cell {
+  color: #64748b;
+  font-size: 14px;
 }
 
-/* Toggle Buttons */
-.btn-group { display: flex; gap: 10px; }
-
-.status-btn {
-    padding: 8px 24px;
-    border-radius: 6px;
-    border: none;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    background-color: #e2e8f0; /* Default Gray */
-    color: #64748b;
-    transition: all 0.2s ease;
+/* Toggle Toggles */
+.toggle-group {
+  display: flex;
+  gap: 12px;
+}
+.toggle-group input {
+  display: none;
+}
+.lbl-present,
+.lbl-absent {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f1f5f9;
+  color: #94a3b8;
+  min-width: 85px;
+  text-align: center;
+  transition: 0.2s;
 }
 
-/* Active States */
-.status-btn.present.active {
-    background-color: var(--success-green);
-    color: white;
+input[value="Present"]:checked + .lbl-present {
+  background: #10b981;
+  color: white;
+}
+input[value="Absent"]:checked + .lbl-absent {
+  background: #ef4444;
+  color: white;
 }
 
-.status-btn.absent.active {
-    background-color: var(--danger-red);
-    color: white;
+/* Summary Grid */
+.summary-section {
+  margin-top: 60px;
+}
+.summary-section h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #1e293b;
 }
 
-/* Summary Section */
-.summary-footer {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #f1f5f9;
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
-
-.summary-footer h3 {
-    font-size: 16px;
-    color: #0f172a;
-    margin-bottom: 20px;
-}
-
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
 .sum-card {
-    padding: 20px;
-    border-radius: 10px;
+  padding: 25px;
+  border-radius: 15px;
 }
-
 .sum-card span {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 8px;
-    font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
 }
-
 .sum-card h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
 }
 
-/* Specific Card Colors */
-.card-green { background-color: #f0fdf4; }
-.card-green span { color: #15803d; }
-.card-green h2 { color: #16a34a; }
-
-.card-red { background-color: #fef2f2; }
-.card-red span { color: #991b1b; }
-.card-red h2 { color: #dc2626; }
-
-.card-blue { background-color: #eff6ff; }
-.card-blue span { color: #1e40af; }
-.card-blue h2 { color: #2563eb; }
-
+.green-sum {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.red-sum {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.blue-sum {
+  background: #eff6ff;
+  color: #2563eb;
+}
