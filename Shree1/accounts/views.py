@@ -9,6 +9,10 @@ from django.db.models import Count
 from django.db.models import F
 from datetime import datetime, date
 from django.db import transaction
+from django.contrib import messages
+import re
+
+     
 
 def login_selection(request):
     return render(request, 'Shree1/login_role.html')
@@ -373,9 +377,22 @@ def worker_profile(request):
 
     # -------- SAVE DATA --------
     if request.method == "POST":
-        request.user.email = request.POST.get("email")
-        request.user.phone = request.POST.get("phone")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        
+        if not re.match(r'^[1-9][0-9]{9}$', phone):
+            messages.error(request, "Phone number must be 10 digits and cannot start with 0.")
+            return redirect('worker_profile')
+
+        # update email in User model
+        request.user.email = email
         request.user.save()
+
+        # update phone in Worker model
+        worker.email = email
+        worker.phone_number = phone
+        worker.save()
+
 
         messages.success(request, "Profile updated successfully!")
         return redirect('worker_profile')
@@ -390,15 +407,55 @@ def worker_profile(request):
         "full_name": worker.name,
         "employee_id": worker.worker_id,
         "email": request.user.email,
-        "phone": request.user.phone,
+        "phone": worker.phone_number,
         "joining_date": request.user.date_joined.strftime("%d %B %Y"),
 
     }
 
     return render(request, "Shree1/workerProfile.html", context)
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Supplier
+
+
+@login_required
 def supplier_profile(request):
-    return render(request, 'Shree1/supplierProfile.html')
+    try:
+        supplier = Supplier.objects.get(user=request.user)
+    except Supplier.DoesNotExist:
+        return redirect('welcome_role')
+
+    # -------- SAVE DATA --------
+    if request.method == "POST":
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+
+        # update email in User model
+        request.user.email = email
+        request.user.save()
+
+        # update phone in Supplier model
+        supplier.phone = phone
+        supplier.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect('supplier_profile')
+
+    # -------- DISPLAY DATA --------
+    context = {
+        "display_name": supplier.name,
+        "display_role": "Supplier",
+
+        "full_name": supplier.name,
+        "employee_id": supplier.supplier_id,
+        "email": request.user.email,
+        "phone": supplier.phone,
+        "joining_date": request.user.date_joined.strftime("%d %B %Y"),
+    }
+
+    return render(request, "Shree1/supplierProfile.html", context)
 
 
 from django.db.models import Q
@@ -549,19 +606,40 @@ def warden_profile(request):
     except Warden.DoesNotExist:
         return redirect('welcome_role')
 
-    context = {
-        "display_name": warden.name,        # header name
-        "display_role": "Warden",           # header role
+    # -------- SAVE DATA --------
+    if request.method == "POST":
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        
+        if not re.match(r'^[1-9][0-9]{9}$', phone):
+            messages.error(request, "Phone number must be 10 digits and cannot start with 0.")
+            return redirect('warden_profile')
 
-        "full_name": warden.name,           # form
+        # update email in User model
+        request.user.email = email
+        request.user.save()
+
+        # update phone in Warden model
+        warden.email = email
+        warden.phone_number = phone
+        warden.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect('warden_profile')
+
+    # -------- DISPLAY DATA --------
+    context = {
+        "display_name": warden.name,
+        "display_role": "Warden",
+
+        "full_name": warden.name,
         "email": request.user.email,
-        "phone": request.user.phone,
+        "phone": warden.phone_number,
         "warden_id": warden.warden_id,
-        "joining_date": "",                 # (optional / future)
+        "joining_date": request.user.date_joined.strftime("%d %B %Y"),
     }
 
     return render(request, "Shree1/warden_profile.html", context)
-
 
 
 
@@ -663,3 +741,6 @@ def approve_leave_logic(request, leave_request_id):
 
 def forget_password(request):
     return render(request, 'Shree1/forget_password.html')
+
+
+

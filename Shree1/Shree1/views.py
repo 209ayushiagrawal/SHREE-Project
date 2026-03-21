@@ -3,6 +3,8 @@
 from django.shortcuts import render,redirect
 
 
+
+
 def welcome_role(request):
     return render(request, 'Shree1/home.html')
 
@@ -80,4 +82,3 @@ def supplier_profile(request):
     }
     return render(request, 'Shree1/supplier_profile.html', context)
 
-# Shree1/views.py

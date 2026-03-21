@@ -9,8 +9,13 @@ admin.site.register(User, UserAdmin)
 admin.site.register(UniversityID)
 
 admin.site.register(Worker)
-admin.site.register(Warden)
+
 admin.site.register(Supplier)
+
+class WardenAdmin(admin.ModelAdmin):
+    list_display = ('warden_id', 'name', 'phone_number', 'leave_balance')
+
+admin.site.register(Warden, WardenAdmin)
 
 
 class AttendanceAdmin(admin.ModelAdmin):

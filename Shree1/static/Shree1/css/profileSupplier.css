@@ -69,21 +69,24 @@ input:disabled {
   background: #f1f5f9;
 }
 
-.save-btn {
-  margin-top: 20px;
-  padding: 12px 24px;
-  border-radius: 10px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
 .password-card h3 {
   margin-bottom: 15px;
 }
 
 .password-card form input {
   margin-bottom: 15px;
+}
+
+.btn {
+  background: #2563eb;
+  color: black;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background: #1d4ed8;
 }
