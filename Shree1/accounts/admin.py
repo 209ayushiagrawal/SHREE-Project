@@ -19,7 +19,12 @@ admin.site.register(Warden, WardenAdmin)
 
 
 class AttendanceAdmin(admin.ModelAdmin):
-    list_display = ('worker_master', 'date', 'status', 'warden') # Columns to show
+    
+    @admin.display(description="Status")  
+    def get_status(self, obj):
+        return obj.status
+    
+    list_display = ('worker_master', 'date', 'get_status', 'warden') # Columns to show
     list_filter = ('date', 'status', 'warden') # Sidebar filters
     search_fields = ('worker_master__full_name', 'worker_master__university_id') # Search bar
 

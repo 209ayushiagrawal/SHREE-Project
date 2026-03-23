@@ -274,9 +274,6 @@ def warden_dashboard(request):
         ]
     })
 
-from django.utils import timezone
-from django.contrib import messages
-
 @login_required
 def attendance_view(request):
     try:
@@ -285,35 +282,46 @@ def attendance_view(request):
         return redirect('welcome_role')
 
     master_list = UniversityID.objects.filter(role='worker')
-    today_date = timezone.now().date() # Server ki aaj ki date
+    today_date = timezone.now().date()
 
     if request.method == "POST":
         date_str = request.POST.get('attendance_date')
-        
-        # --- DATE RESTRICTION LOGIC ---
-        # Agar user aaj ke ilawa koi aur date bhejta hai, toh error show karein
+
         if date_str != str(today_date):
             messages.error(request, "Attendance sirf aaj ki date (Today) ke liye li ja sakti hai!")
             return redirect('attendance')
 
         for person in master_list:
             status = request.POST.get(f'status_{person.university_id}')
+
+            print("Worker:", person.university_id, "Status:", status)
+
             if status:
                 Attendance.objects.update_or_create(
-                    worker_master=person, 
+                    worker_master=person,
                     date=date_str,
                     defaults={'status': status, 'warden': warden}
                 )
+
         messages.success(request, f"Attendance for {today_date} has been saved.")
         return redirect('attendance')
+
+    # 👇 ADD THIS BLOCK
+    existing_attendance = Attendance.objects.filter(date=today_date)
+
+    attendance_dict = {
+        att.worker_master.university_id: att.status
+        for att in existing_attendance
+    }
 
     context = {
         'workers': master_list,
         'today': today_date.strftime('%Y-%m-%d'),
-        'warden': warden
+        'warden': warden,
+        'attendance_dict': attendance_dict
     }
-    return render(request, 'Shree1/warden_attendance.html', context)
 
+    return render(request, 'Shree1/warden_attendance.html', context)
 @login_required
 def worker_dashboard(request):
     try:
@@ -450,6 +458,12 @@ from django.contrib import messages
 from .models import Supplier
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Supplier
+
+
 @login_required
 def supplier_profile(request):
     try:
@@ -462,12 +476,12 @@ def supplier_profile(request):
         email = request.POST.get("email")
         phone = request.POST.get("phone")
 
-        # update email in User model
+        # Save email in User table
         request.user.email = email
         request.user.save()
 
-        # update phone in Supplier model
-        supplier.phone = phone
+        # Save phone in Supplier table
+        supplier.phone_number = phone
         supplier.save()
 
         messages.success(request, "Profile updated successfully!")
@@ -478,15 +492,13 @@ def supplier_profile(request):
         "display_name": supplier.name,
         "display_role": "Supplier",
 
-        "full_name": supplier.name,
+        "username": supplier.name,
         "employee_id": supplier.supplier_id,
-        "email": request.user.email,
-        "phone": supplier.phone,
-        "joining_date": request.user.date_joined.strftime("%d %B %Y"),
+        "email": 'supplier@gmail.com',
+        "phone": '9876543210',
     }
 
-    return render(request, "Shree1/supplierProfile.html", context)
-
+    return render(request, 'Shree1/supplier_profile.html', context)
 
 from django.db.models import Q
 

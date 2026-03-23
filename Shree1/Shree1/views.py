@@ -168,34 +168,37 @@ def admin_leave_Management(request):
 
     pending = LeaveRequest.objects.filter(status='Pending')
     return render(request, 'Shree1/admin_leave_Management.html', {'pending': pending})
-
-
+@login_required
 def admin_profile(request):
-    # You can pass real user data here if using request.user
-    context = {
-        'username': 'slzmdl',
-        'role': 'Admin',
-        'email': 'slzmdl@gmail.com',
-        'phone': '+91 98765 43210',
-        'employee_id': 'EMP001',
-        'department': 'Kitchen',
-        'joining_date': '15-01-2024',
-        'address': '123 Main Street, City, State'
-    }
-    return render(request, 'Shree1/admin_profile.html')
 
+    if 'profile' not in request.session:
+        request.session['profile'] = {
+            'username': 'Shree',
+            'email': 'slzmdl@gmail.com',
+            'phone': '9876543210',
+        }
 
-def supplier_profile(request):
-    # Context data for the Supplier
-    context = {
-        'username': 'zxms',
-        'role': 'Supplier',
-        'email': 'zxms@gmail.com',
-        'phone': '+91 98765 43210',
-        'employee_id': 'EMP001',
-        # Department removed from context
-        'joining_date': '15-01-2024',
-        'address': '123 Main Street, City, State'
-    }
-    return render(request, 'Shree1/supplier_profile.html', context)
+    profile = request.session['profile']
 
+    if request.method == "POST":
+        email = request.POST.get('email')
+        phone = request.POST.get('phone').strip()
+
+        if not phone.isdigit():
+            messages.error(request, "Phone must contain only digits.")
+
+        elif len(phone) != 10:
+            messages.error(request, "Phone must be exactly 10 digits.")
+
+        elif phone[0] == '0':
+            messages.error(request, "Phone cannot start with 0.")
+
+        else:
+            profile['email'] = email
+            profile['phone'] = phone
+            request.session['profile'] = profile
+
+            messages.success(request, "Profile updated successfully!")
+            return redirect('admin_profile')
+
+    return render(request, 'Shree1/admin_profile.html', profile)
